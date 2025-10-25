@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Trivia – Juego</title>
+
+  <link rel="stylesheet" href="./css/trivia.play.css">
+</head>
+<body>
+  <main id="play" aria-live="polite">
+    <h1>QUIZ TIME</h1>
+
+    <!-- Cronómetro global (1 minuto para las 10 preguntas) -->
+    <div aria-label="Tiempo restante">
+      <progress id="timerProgress" max="100" value="100"></progress>
+      <span id="timerText">01:00</span>
+    </div>
+
+    <!-- Avance -->
+    <div>
+      <strong id="progress" style="opacity: 0;"></strong>
+    </div>
+
+    <!-- Pregunta -->
+    <h2 id="qtext">Cargando…</h2>
+
+    <!-- Alternativas -->
+    <div id="answers" role="group" aria-label="Opciones de respuesta"></div>
+  </main>
+
+<!-- Logo inferior -->
+<div class="play-brand-wrap">
+  <img class="play-brand" src="./images/logoblue.png" alt="Logo del juego" />
+</div>
+
+  <script>
+    (function () {
+      // -------- Configuración --------
+      const BLOCK_SIZE = 10;       // 10 preguntas por bloque
+      const TOTAL_BLOCKS = 5;      // 5 bloques (50 preguntas)
+      const TOTAL_QUESTIONS = 10;  // se responden las 10 del bloque
+      const TOTAL_TIME_MS = 60_000; // 1 minuto total
+      const TICK_MS = 100;          // refresco cronómetro
+      const NEXT_DELAY_MS = 550;    // pausa breve para mostrar verde/rojo antes de avanzar
+
+      // -------- Elementos --------
+      const qEl = document.getElementById('qtext');
+      const answersEl = document.getElementById('answers');
+      const progressEl = document.getElementById('progress');
+      const timerProgress = document.getElementById('timerProgress');
+      const timerText = document.getElementById('timerText');
+
+      // -------- Estado --------
+      let state = {
+        block: 1,
+        order10: [],         // orden barajado de 0..9
+        idx: 0,              // índice actual (0..9)
+        score: 0,
+        startedAt: Date.now(),
+        all: [],             // todas las preguntas (array de objetos)
+        blockSlice: [],      // 10 preguntas del bloque elegido
+        globalTimer: null,
+        globalElapsed: 0
+      };
+
+      // -------- Utilidades --------
+      function shuffle(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+      }
+
+      function getBlockFromSessionOrURL() {
+        // 1) sessionStorage
+        try {
+          const raw = sessionStorage.getItem('trivia_state');
+          if (raw) {
+            const s = JSON.parse(raw);
+            if (s && Number.isInteger(s.block) && s.block >= 1 && s.block <= TOTAL_BLOCKS) {
+              return s.block;
+            }
+          }
+        } catch (e) {}
+        // 2) ?block=1..5
+        const p = parseInt(new URLSearchParams(location.search).get('block'), 10);
+        if (Number.isInteger(p) && p >= 1 && p <= TOTAL_BLOCKS) return p;
+        // 3) por defecto
+        return 1;
+      }
+
+      function sliceBlock(allQuestions, blockNumber) {
+        const start = (blockNumber - 1) * BLOCK_SIZE;
+        return allQuestions.slice(start, start + BLOCK_SIZE);
+      }
+
+      function mmss(msLeft) {
+        const totalSec = Math.ceil(msLeft / 1000);
+        const m = Math.floor(totalSec / 60).toString().padStart(2, '0');
+        const s = (totalSec % 60).toString().padStart(2, '0');
+        return `${m}:${s}`;
+      }
+
+      function updateTimerUI() {
+        const remaining = Math.max(0, TOTAL_TIME_MS - state.globalElapsed);
+        const pct = Math.round((remaining / TOTAL_TIME_MS) * 100);
+        timerProgress.value = pct;
+        timerText.textContent = mmss(remaining);
+      }
+
+      function startGlobalTimer() {
+        stopGlobalTimer();
+        state.globalElapsed = 0;
+        updateTimerUI();
+        state.globalTimer = setInterval(() => {
+          state.globalElapsed += TICK_MS;
+          if (state.globalElapsed >= TOTAL_TIME_MS) {
+            stopGlobalTimer();
+            finishAndRedirect();
+            return;
+          }
+          updateTimerUI();
+        }, TICK_MS);
+      }
+
+      function stopGlobalTimer() {
+        if (state.globalTimer) {
+          clearInterval(state.globalTimer);
+          state.globalTimer = null;
+        }
+      }
+
+      function lockAllAnswers() {
+        Array.from(answersEl.querySelectorAll('button')).forEach(b => b.disabled = true);
+      }
+
+      function renderQuestion() {
+        if (state.idx >= TOTAL_QUESTIONS) {
+          finishAndRedirect();
+          return;
+        }
+        progressEl.textContent = `${state.idx + 1} / ${TOTAL_QUESTIONS}`;
+
+        const qIndexInBlock = state.order10[state.idx]; // 0..9
+        const item = state.blockSlice[qIndexInBlock];   // {q, a[], c}
+
+        qEl.textContent = item.q;
+
+        // Render de respuestas
+        answersEl.innerHTML = '';
+        const options = item.a.map((txt, idx) => ({ txt, idx }));
+        shuffle(options);
+        const newCorrectIdx = options.findIndex(o => o.idx === item.c);
+
+        options.forEach((opt, i) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.textContent = opt.txt;
+          btn.addEventListener('click', () => {
+            // marcar verde/rojo el botón presionado
+            const isCorrect = (i === newCorrectIdx);
+            if (isCorrect) {
+              state.score += 1;
+              btn.style.backgroundColor = '#22c55e'; // verde
+              btn.style.color = '#000';
+            } else {
+              btn.style.backgroundColor = '#ef4444'; // rojo
+              btn.style.color = '#000';
+            }
+            lockAllAnswers();
+            // avanzar tras una breve pausa
+            setTimeout(() => {
+              state.idx += 1;
+              if (state.globalElapsed >= TOTAL_TIME_MS) {
+                finishAndRedirect();
+              } else {
+                renderQuestion();
+              }
+            }, NEXT_DELAY_MS);
+          });
+          answersEl.appendChild(btn);
+        });
+      }
+
+      function finishAndRedirect() {
+        stopGlobalTimer();
+        // Guarda resultado por si lo quieres leer en trivia.html
+        try {
+          const result = {
+            block: state.block,
+            score: state.score,
+            total: TOTAL_QUESTIONS,
+            answered: Math.min(state.idx, TOTAL_QUESTIONS),
+            startedAt: state.startedAt,
+            finishedAt: Date.now(),
+            timeSpentMs: Math.min(state.globalElapsed, TOTAL_TIME_MS)
+          };
+          sessionStorage.setItem('trivia_result', JSON.stringify(result));
+        } catch (e) {}
+
+        // Redirigir
+        window.location.href = './trivia.html';
+      }
+
+      async function loadQuestionsJSON() {
+        const url = './data/trivia.json';
+        const res = await fetch(url, { cache: 'no-store' });
+        if (!res.ok) throw new Error('No se pudo cargar trivia.json');
+        const data = await res.json();
+        if (!Array.isArray(data.preguntas) || data.preguntas.length < BLOCK_SIZE * TOTAL_BLOCKS) {
+          throw new Error('Formato de trivia.json inválido o incompleto');
+        }
+        return data.preguntas;
+      }
+
+      // -------- Init --------
+      (async function init() {
+        try {
+          state.block = getBlockFromSessionOrURL();
+          state.all = await loadQuestionsJSON();
+          state.blockSlice = sliceBlock(state.all, state.block);
+          state.order10 = shuffle([...Array(BLOCK_SIZE).keys()]); // las 10 preguntas barajadas
+          state.idx = 0;
+          state.score = 0;
+          state.startedAt = Date.now();
+
+          // persistir bloque por si refrescan
+          try {
+            const raw = sessionStorage.getItem('trivia_state');
+            const prev = raw ? JSON.parse(raw) : {};
+            sessionStorage.setItem('trivia_state', JSON.stringify({ ...prev, block: state.block }));
+          } catch (e) {}
+
+          startGlobalTimer();
+          renderQuestion();
+        } catch (err) {
+          console.error(err);
+          qEl.textContent = 'Error cargando preguntas.';
+          answersEl.textContent = 'Verifica que ./data/trivia.json exista y tenga 50 preguntas.';
+          progressEl.textContent = '—';
+          timerProgress.value = 0;
+          timerText.textContent = '—';
+        }
+      })();
+    })();
+  </script>
+</body>
+</html>

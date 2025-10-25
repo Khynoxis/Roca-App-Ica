@@ -1,0 +1,130 @@
+/* Fondo (mantén tu imagen si ya la usas) */
+html, body { height: 100%; margin: 0; }
+body{
+  background: url("../images/fondotrivia.png") no-repeat center center fixed;
+  background-size: cover;
+  color: #fff;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+/* Contenedor principal: alineado a la izquierda */
+
+#play{
+  box-sizing: border-box;
+  max-width: 880px;     /* ajusta si necesitas más/menos ancho */
+  margin: 6vh auto 10px auto;
+}
+
+/* QUIZ TIME arriba, a la izquierda */
+#play h1{
+  font-size: 260px;
+  line-height: 220px;      /* ajusta tamaño */
+  font-weight: 500;
+  margin: 0 0 42px 0;
+}
+
+/* Cronómetro debajo del título (normal) */
+[aria-label="Tiempo restante"]{
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 0 0;
+}
+progress{
+  width: 100%;
+  height: 30px;
+  appearance: none;
+  border: none;
+  background: #ffffff2a;
+  border-radius: 999px;
+  overflow: hidden;
+}
+progress::-webkit-progress-bar{ background: #ffffff2a; border-radius: 999px; }
+progress::-webkit-progress-value{ background: #ffffffcc; border-radius: 999px; }
+progress::-moz-progress-bar{ background: #ffffffcc; border-radius: 999px; }
+#timerText{
+  font-variant-numeric: tabular-nums;
+  font-size: 46px;
+  opacity: .9;
+}
+
+/* Pregunta (texto blanco) */
+#qtext{
+  color: #fff;
+  margin: 0 0 50px 0;
+  font-size: 50px;     /* ajusta tamaño */
+  line-height: 1.35;
+  font-weight: 600;
+}
+
+/* Alternativas en 1 columna (forzado) */
+#answers{
+  display: grid;
+  gap: 42px;
+  grid-template-columns: 1fr; /* 1 columna */
+  align-items: stretch;
+}
+
+/* Botones: fondo blanco, texto negro */
+#answers button{
+  width: 100%;
+  padding: 42px 74px;
+  text-align: left;
+  font-size: 40px;
+  font-weight: 700;
+  border-radius: 10px;
+  border: 1px solid #000000;
+  background: #fff;
+  color: #111;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,.15);
+  transition: background .12s ease, box-shadow .12s ease, transform .04s ease;
+}
+#answers button:hover{ background:#f6f6f6; box-shadow: 0 2px 5px rgba(0,0,0,.18); }
+#answers button:active{ transform: translateY(1px); }
+#answers button[disabled]{ opacity:.9; cursor:not-allowed; }
+
+/* Asegurar foco accesible */
+#answers button:focus { outline: 2px solid #1e90ff; outline-offset: 2px; }
+
+/* Progreso (0/10) opcional a la izquierda si lo usas */
+#progress{
+  display: inline-block;
+  margin: 6px 0 6px 0;
+  font-size: 14px;
+  opacity: .9;
+}
+
+
+/* Posicionamiento del contenedor (abajo, centrado) */
+.play-brand-wrap{
+  position: fixed;
+  left: 70%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  transform-origin: center bottom;
+  animation: heartbeatWrap 1.6s ease-in-out infinite;
+  will-change: transform;
+  pointer-events: none; /* no bloquea clics del juego */
+  z-index: 10;          /* por si hay overlays encima */
+}
+
+/* La imagen solo muestra el logo; no se anima directamente */
+.play-brand{
+  display: block;
+  height: 260px;      /* ajusta el tamaño aquí */
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Animación tipo “latido” (escala suave) */
+@keyframes heartbeatWrap {
+  0%   { transform: translateX(-50%) scale(1); }
+  14%  { transform: translateX(-50%) scale(1.10); }
+  28%  { transform: translateX(-50%) scale(1); }
+  42%  { transform: translateX(-50%) scale(1.10); }
+  70%  { transform: translateX(-50%) scale(1); }
+  100% { transform: translateX(-50%) scale(1); }
+}

@@ -7,18 +7,23 @@
   <link rel="stylesheet" href="./css/trivia.css"/>
 </head>
 <body class="trivia-page">
+  <!-- Fondo -->
+  <div class="bg" aria-hidden="true"></div>
 
-  <header class="toolbar">
-    <a class="btn back" href="index.html">← Inicio</a>
-    <h1 class="title">Trivia</h1>
-  </header>
+  <!-- Contenido -->
+  <main class="stage">
+    <img class="logo" src="./images/logoblue.png" alt="Logo Trivia" />
 
-  <main class="container">
-    <section id="trivia" class="card">
-      <div class="loading">Cargando preguntas…</div>
-    </section>
+    <!-- Botones de bloques -->
+    <nav class="blocks" aria-label="Selecciona un bloque">
+      <button class="block-btn" type="button" data-block="1"><span>BLOQUE 1</span></button>
+      <button class="block-btn" type="button" data-block="2"><span>BLOQUE 2</span></button>
+      <button class="block-btn" type="button" data-block="3"><span>BLOQUE 3</span></button>
+      <button class="block-btn" type="button" data-block="4"><span>BLOQUE 4</span></button>
+      <button class="block-btn" type="button" data-block="5"><span>BLOQUE 5</span></button>
+    </nav>
   </main>
-
   <script src="./js/trivia.js"></script>
+
 </body>
 </html>

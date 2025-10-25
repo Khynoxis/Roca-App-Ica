@@ -1,253 +1,298 @@
-/* ================== Tema base ================== */
 :root{
-  --bg: #0b1224;
-  --text: #eef2ff;
-  --muted: #c7d2fe;
-  --accent: #ffffff;
+  /* Ajustes rápidos */
+  --top-offset: 6vh;            /* separación superior del logo */
 
-  --ok: #22c55e;
-  --bad: #ef4444;
+  /* Tamaño de los botones */
+  --block-btn-height: 160px;    /* alto mínimo */
+  --block-btn-fsize:  36px;     /* tamaño del texto */
+  --block-btn-py:     18px;     /* padding vertical */
+  --block-btn-px:     28px;     /* padding horizontal */
 
-  --radius: 20px;
-  --card-bg: rgba(255,255,255,.03);
-  --card-brd: rgba(255,255,255,.18);
-  --shadow: 0 18px 40px rgba(0,0,0,.35);
-
-  /* Neón (externo + interno) */
-  --neon-outer-1: 0 0 14px rgba(255,255,255,.95), 0 0 36px rgba(255,255,255,.85);
-  --neon-outer-2: 0 0 22px rgba(255,255,255,1),   0 0 56px rgba(255,255,255,.95), 0 0 96px rgba(255,255,255,.9);
-  --neon-inner-1: inset 0 0 10px rgba(255,255,255,.55);
-  --neon-inner-2: inset 0 0 16px rgba(255,255,255,.7);
+  /* Colores del degradado (claro → oscuro → claro) */
+  --c-light: #328290;           /* turquesa claro */
+  --c-dark:  #352e70;           /* morado/azul oscuro */
+  --grad-angle: 90deg;          /* dirección del degradado (izq→der) */
 }
 
 *{ box-sizing: border-box; }
 html, body{ height: 100%; }
 body.trivia-page{
   margin: 0;
-  color: var(--text);
-  background: var(--bg) url("../images/fondoprincipal.png") center/cover no-repeat fixed;
-  font-family: "Advent Pro", system-ui, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-/* ================== Layout ================== */
-.toolbar{
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 12px;
-  padding: clamp(10px, 2.4vh, 18px) clamp(12px, 2vw, 24px);
-}
-.toolbar .title{
-  justify-self: center;
-  margin: 0;
-  font-size: clamp(22px, 3.2vh, 34px);
-  color: var(--muted);
-  letter-spacing: .5px;
-}
-.toolbar .back{ justify-self: start; }
-
-.container{
-  min-height: calc(100dvh - 80px);
-  display: grid;
-  place-items: start center;
-  padding: clamp(12px, 3vh, 28px) clamp(12px, 2vw, 24px) 32px;
-}
-
-.card{
-  width: min(94vw, 980px);
-  background: var(--card-bg);
-  border: 2px solid var(--card-brd);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: clamp(14px, 2.8vh, 28px);
-  animation: cardIn .5s ease-out both;
-}
-@keyframes cardIn{
-  from{ opacity: 0; transform: translateY(8px) scale(.995); }
-  to  { opacity: 1; transform: translateY(0)   scale(1); }
-}
-
-/* ================== Botones (neón) ================== */
-.btn{
-  appearance: none;
-  border: 6px solid var(--accent);
-  background: transparent;
+  font-family: system-ui, Arial, sans-serif;
   color: #fff;
-  text-decoration: none;
-  display: inline-grid;
+  overflow: hidden; /* pantalla completa */
+}
+
+/* Fondo a pantalla completa */
+.bg{
+  position: fixed;
+  inset: 0;
+  background: #000 url("../images/fondotriviabloques.png") center/cover no-repeat;
+  z-index: 0;
+}
+
+/* Escenario: centra el contenido verticalmente */
+.stage{
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  display: grid;
+  place-items: start center;      /* centrado horizontal, arriba un poco */
+  padding-top: var(--top-offset); /* ajusta altura del logo desde arriba */
+}
+
+/* Logo (igual que tienes ahora) */
+.logo{
+  position: fixed;
+  top: -20px;
+  left: 570px;
+  right: 0;
+  width: 45vw;
+  height: auto;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Afinado para pantallas 1080×1920 vertical */
+@media (orientation: portrait) and (min-height: 1700px){
+  :root{
+    --top-offset: 8vh;
+    --block-btn-height: 180px;
+    --block-btn-fsize:  40px;
+  }
+}
+
+/* ===== LISTA VERTICAL ===== */
+.blocks{
+  width: min(96vw, 880px);
+  display: grid;
+  grid-auto-flow: row;
+  grid-template-columns: 1fr;   /* una sola columna */
+  gap: 45px;                    /* separación entre botones */
+  margin-top: 80px;
+}
+
+/* ================== BOTONES BLOQUE ================== */
+.block-btn{
+  width: 100%;
+  max-width: 120%;
+  min-height: 250px;
+  padding: var(--block-btn-py) var(--block-btn-px);
+
+  display: grid;
   place-items: center;
-  padding: 12px 18px;
-  min-height: 60px;
-  border-radius: 16px;
-  font-size: clamp(18px, 2.4vh, 22px);
-  font-weight: 600;
-  letter-spacing: .6px;
-  box-shadow: var(--neon-outer-1), var(--neon-inner-1);
-  transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease, filter .12s ease;
+  text-align: center;
+
+  border: 0;
+  border-radius: 0; /* recto, como en tu imagen */
+  box-shadow: 0 1px 0 rgba(0,0,0,.18);
+
+  /* Degradado claro → oscuro → claro (estático) */
+  background: linear-gradient(
+    var(--grad-angle),
+    var(--c-light) 0%,
+    var(--c-dark)  50%,
+    var(--c-light) 100%
+  );
+
+  color: #fff;
+  font-weight: 700;
+  font-size: 65px;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+
   -webkit-tap-highlight-color: transparent;
   user-select: none;
   touch-action: manipulation;
-}
-.btn:hover{ transform: translateY(-1px); box-shadow: var(--neon-outer-2), var(--neon-inner-2); }
-.btn:active{ transform: translateY(1px) scale(.992); }
-.btn[disabled]{ opacity: .5; filter: grayscale(.6); pointer-events: none; }
-.btn.small{
-  border-width: 4px;
-  min-height: 54px;
-  padding: 8px 14px;
-  font-size: clamp(16px, 2.2vh, 20px);
+
+  transition: transform .12s ease;
 }
 
-/* ================== Pantalla de bloques ================== */
-.block-grid{
-  display: grid;
-  gap: clamp(14px, 2vh, 18px);
-  margin-top: 8px;
-}
-.block-btn{
-  width: 100%;
-  display: grid;
-  grid-template-rows: auto auto;
-  align-content: center;
-  gap: 6px;
-  height: clamp(80px, 10vh, 120px);
-}
-.block-btn span{ line-height: 1; font-size: clamp(20px, 2.6vh, 26px); }
-.block-btn small{ line-height: 1; opacity:.88; font-size: clamp(14px, 2vh, 18px); }
-.block-btn:disabled{ opacity: .45; pointer-events: none; filter: grayscale(1); }
-
-/* ================== Cabecera de pregunta ================== */
-.trivia-header{
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: clamp(10px, 2vh, 16px);
-}
-.pill{
-  padding: 8px 12px;
-  border: 1px solid rgba(255,255,255,.6);
-  border-radius: 999px;
-  font-size: clamp(16px, 2.1vh, 20px);
-  color: var(--text);
-}
-.pill.score{ border-color: rgba(255,255,255,.35); }
-
-/* ================== Pregunta y respuestas ================== */
-.q{
-  margin: 8px 0 16px;
-  font-size: clamp(22px, 3.2vh, 34px);
-  line-height: 1.25;
-  text-wrap: balance;
+.block-btn:hover   { transform: translateY(-1px); }
+.block-btn:active  { transform: translateY(1px) scale(.992); }
+.block-btn:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 2px #000, 0 0 0 6px #fff;
 }
 
-.answers{
-  display: grid;
-  gap: clamp(12px, 2vh, 16px);
-  counter-reset: opt;
-}
-.ans{
-  width: 100%;
-  min-height: clamp(70px, 9vh, 120px);
-  padding: clamp(14px, 2.2vh, 18px) clamp(16px, 2.2vw, 22px);
-  border-radius: 16px;
-  border: 2px solid rgba(255,255,255,.9);
-  background: rgba(255,255,255,.02);
-  color: #fff;
-  font-size: clamp(18px, 2.4vh, 24px);
-  letter-spacing: .3px;
-  text-align: left;
-  box-shadow: inset 0 0 10px rgba(255,255,255,.08);
-  transition: transform .08s ease, background .12s ease, border-color .12s ease, box-shadow .12s ease, filter .12s ease;
-  -webkit-tap-highlight-color: transparent;
+
+/* ===== Animaciones de los botones ===== */
+
+/* Entrada escalonada de cada botón */
+.blocks .block-btn{
   position: relative;
   overflow: hidden;
-  animation: ansIn .28s ease-out both;
+  transform: translateY(8px) scale(.98);
+  opacity: 0;
+  animation: btnIntro .55s ease-out forwards;
 }
-.answers .ans:nth-child(1){ animation-delay: .04s; }
-.answers .ans:nth-child(2){ animation-delay: .10s; }
-.answers .ans:nth-child(3){ animation-delay: .16s; }
-.answers .ans:nth-child(4){ animation-delay: .22s; }
+.blocks .block-btn:nth-child(1){ animation-delay: .05s; }
+.blocks .block-btn:nth-child(2){ animation-delay: .15s; }
+.blocks .block-btn:nth-child(3){ animation-delay: .25s; }
+.blocks .block-btn:nth-child(4){ animation-delay: .35s; }
+.blocks .block-btn:nth-child(5){ animation-delay: .45s; }
 
-@keyframes ansIn{
-  from{ opacity:0; transform: translateY(6px); }
-  to  { opacity:1; transform: translateY(0); }
+@keyframes btnIntro{
+  to{ transform: translateY(0) scale(1); opacity: 1; }
 }
 
-/* Etiqueta A/B/C/D automática */
-.ans::before{
-  counter-increment: opt;
-  content: counter(opt, upper-alpha) ".";
+/* “Sheen” / brillo diagonal continuo (sutil, sin "cebra") */
+.blocks .block-btn::before{
+  content: "";
   position: absolute;
-  left: clamp(10px, 1.2vw, 16px);
-  top: 50%;
-  transform: translateY(-50%);
-  font-weight: 700;
-  opacity: .9;
-  letter-spacing: .5px;
-}
-.ans span{
-  display: block;
-  padding-left: clamp(26px, 2.2vw, 34px);
+  inset: -20%;
   pointer-events: none;
-  line-height: 1.22;
+  background: linear-gradient(
+    110deg,
+    rgba(255,255,255,0) 30%,
+    rgba(255,255,255,.20) 50%,
+    rgba(255,255,255,0) 70%
+  );
+  transform: translateX(-130%) rotate(12deg);
+  mix-blend-mode: screen;
+  animation: sheenSlide 3.2s linear infinite;
 }
 
-.ans:hover{ transform: translateY(-1px); background: rgba(255,255,255,.06); }
-.ans:active{ transform: translateY(0); }
-
-/* Estados de respuesta */
-.ans.ok{
-  border-color: var(--ok);
-  background: color-mix(in srgb, var(--ok) 18%, transparent);
-  box-shadow: 0 0 18px color-mix(in srgb, var(--ok) 35%, transparent), inset 0 0 12px color-mix(in srgb, var(--ok) 22%, transparent);
-}
-.ans.bad{
-  border-color: var(--bad);
-  background: color-mix(in srgb, var(--bad) 18%, transparent);
-  box-shadow: 0 0 18px color-mix(in srgb, var(--bad) 35%, transparent), inset 0 0 12px color-mix(in srgb, var(--bad) 22%, transparent);
-  filter: saturate(1.05);
+@keyframes sheenSlide{
+  0%   { transform: translateX(-130%) rotate(12deg); }
+  100% { transform: translateX(130%)  rotate(12deg); }
 }
 
-/* ================== Acciones ================== */
-.actions{
+/* Feedback sutil al pasar/precisar */
+.block-btn:hover   { transform: translateY(-2px) scale(1.005); }
+.block-btn:active  { transform: translateY(1px)  scale(.992); }
+
+
+/* Fondo distinto para la pantalla de juego */
+body.trivia-play .bg{
+  background: #000 url("../images/fondotrivia.png") center/cover no-repeat;
+}
+
+
+/* ===== Pantalla de juego: fondo distinto ===== */
+body.trivia-play .bg{
+  background: #000 url("../images/fondotriviaplay.png") center/cover no-repeat;
+}
+
+/* Layout del contenedor de juego */
+body.trivia-play .stage{
+  place-items: start center;
+  padding-top: 6vh;
+}
+body.trivia-play .card{
+  width: min(96vw, 980px);
   display: grid;
-  gap: 12px;
-  justify-items: center;
-  margin-top: clamp(14px, 2vh, 18px);
-}
-.actions.two{
-  grid-template-columns: 1fr 1fr;
-  align-items: stretch;
-}
-.actions .btn{ width: 100%; }
-
-/* ================== Mensajes ================== */
-.loading,.error{
-  text-align:center;
-  opacity:.85;
-  padding: 16px;
-  font-size: clamp(16px, 2.2vh, 20px);
+  grid-auto-flow: row;
+  gap: 22px;
 }
 
-/* ================== Accesibilidad ================== */
-.btn:focus-visible,
-.ans:focus-visible{
+/* Texto superior */
+body.trivia-play .topline{
+  font-size: clamp(20px, 2.6vh, 34px);
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: .3px;
+  text-transform: none;
+}
+
+/* Cronómetro en línea */
+:root{
+  --timer-h: 12px;
+  --timer-bg: rgba(255,255,255,.22);
+  --timer-fg: #ffffff;
+}
+body.trivia-play .timer{
+  width: 100%;
+  height: var(--timer-h);
+  background: var(--timer-bg);
+  position: relative;
+  overflow: hidden;
+}
+body.trivia-play .timer-bar{
+  height: 100%;
+  width: 100%;                  /* arranca lleno; animación lo reduce */
+  background: var(--timer-fg);
+  transform-origin: left center;
+}
+
+/* Pregunta */
+body.trivia-play .q{
+  margin: 6px 0 0 0;
+  font-size: clamp(24px, 3.2vh, 42px);
+  font-weight: 800;
+  line-height: 1.25;
+  text-align: center;
+}
+
+/* Alternativas */
+body.trivia-play .answers{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+body.trivia-play .ans{
+  appearance: none;
+  width: 100%;
+  min-height: 84px;
+  padding: 18px 20px;
+
+  /* Rectángulo blanco, sin borde, sin radio */
+  background: #fff;
+  border: 0;
+  border-radius: 0;
+
+  color: #111;
+  text-align: left;
+  font-size: clamp(18px, 2.4vh, 28px);
+  font-weight: 700;
+  letter-spacing: .2px;
+
+  display: grid;
+  align-items: center;
+  justify-items: start;
+
+  cursor: pointer;
+  transition: transform .08s ease, filter .08s ease, background-color .08s ease;
+}
+body.trivia-play .ans:hover{ transform: translateY(-1px); }
+body.trivia-play .ans:active{ transform: translateY(1px) scale(.996); }
+body.trivia-play .ans:disabled{
+  opacity: .85;
+  cursor: default;
+}
+
+/* Estados correctos/incorrectos */
+body.trivia-play .ans.ok{
+  background: #22c55e; /* verde */
+  color: #fff;
+}
+body.trivia-play .ans.bad{
+  background: #ef4444; /* rojo */
+  color: #fff;
+}
+
+/* Accesibilidad foco */
+body.trivia-play .ans:focus-visible{
   outline: none;
-  box-shadow:
-    0 0 0 2px #000,
-    0 0 0 6px #fff,
-    var(--neon-outer-2);
-}
-@media (prefers-reduced-motion: reduce){
-  .card, .ans{ animation: none !important; }
+  box-shadow: 0 0 0 2px #000, 0 0 0 6px #fff;
 }
 
-/* ================== Ajustes para 1080×1920 vertical ================== */
+/* Logo inferior fijo */
+body.trivia-play .play-brand{
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  width: min(42vw, 280px);
+  height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: drop-shadow(0 0 10px rgba(0,0,0,.45));
+}
+
+/* Ajuste 1080×1920 vertical */
 @media (orientation: portrait) and (min-height: 1700px){
-  .card{ width: min(96vw, 1000px); }
-  .q{ font-size: clamp(24px, 3.6vh, 38px); }
-  .ans{ min-height: clamp(80px, 9.6vh, 130px); }
-  .btn{ min-height: 66px; }
+  body.trivia-play .card{ width: min(96vw, 1080px); gap: 26px; }
+  body.trivia-play .ans{ min-height: 96px; font-size: clamp(20px, 2.8vh, 32px); }
 }
