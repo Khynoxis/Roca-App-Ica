@@ -1,0 +1,504 @@
+{
+  "preguntas": [
+    {
+      "q": "¿Cuál de los siguientes agentes se asocia más frecuentemente con broncoconstricción?",
+      "a": [
+        "Isoflurano",
+        "Sevoflurano",
+        "Desflurano",
+        "Halotano"
+      ],
+      "c": 2
+    },
+    {
+      "q": "Durante una anestesia general, un paciente presenta hipotensión tras inducción con propofol. ¿Cuál es la causa más probable?",
+      "a": [
+        "Hipovolemia",
+        "Estimulación vagal",
+        "Vasodilatación periférica",
+        "Bloqueo simpático"
+      ],
+      "c": 2
+    },
+    {
+      "q": "¿Cuál es el principal objetivo de la preoxigenación antes de la inducción anestésica?",
+      "a": [
+        "Reducir atelectasias",
+        "Aumentar la reserva de oxígeno pulmonar",
+        "Mejorar la hemodinamia",
+        "Facilitar la intubación"
+      ],
+      "c": 1
+    },
+    {
+      "q": "En una anestesia balanceada, el opioide más utilizado para el control del dolor intraoperatorio es:",
+      "a": [
+        "Fentanilo",
+        "Remifentanilo",
+        "Morfina",
+        "Buprenorfina"
+      ],
+      "c": 0
+    },
+    {
+      "q": "Durante la anestesia, el rango de BIS recomendado para un nivel quirúrgico adecuado es:",
+      "a": [
+        "20–30",
+        "40–60",
+        "70–90",
+        "10–20"
+      ],
+      "c": 1
+    },
+    {
+      "q": "¿Cuál es el principal efecto adverso de la succinilcolina?",
+      "a": [
+        "Hipotermia",
+        "Hiperpotasemia",
+        "Bradicardia",
+        "Rabdomiólisis"
+      ],
+      "c": 1
+    },
+    {
+      "q": "Un paciente ASA III se programa para cirugía electiva. ¿Qué indica esta clasificación?",
+      "a": [
+        "Enfermedad sistémica severa",
+        "Riesgo vital inmediato",
+        "Enfermedad leve",
+        "Estado físico normal"
+      ],
+      "c": 0
+    },
+    {
+      "q": "¿Cuál de los siguientes inhalatorios tiene el inicio y recuperación más rápidos?",
+      "a": [
+        "Isoflurano",
+        "Desflurano",
+        "Sevoflurano",
+        "Halotano"
+      ],
+      "c": 1
+    },
+    {
+      "q": "En caso de laringoespasmo postextubación, la primera medida debe ser:",
+      "a": [
+        "Administrar relajante muscular",
+        "Aplicar presión positiva con oxígeno 100 %",
+        "Administrar naloxona",
+        "Reintubar inmediatamente"
+      ],
+      "c": 1
+    },
+    {
+      "q": "¿Qué agente anestésico inhalatorio es más adecuado en pacientes pediátricos por su olor no irritante?",
+      "a": [
+        "Isoflurano",
+        "Sevoflurano",
+        "Halotano",
+        "Desflurano"
+      ],
+      "c": 1
+    },
+    {
+      "q": "¿Cuál de los siguientes anestésicos locales pertenece al grupo de los ésteres?",
+      "a": [
+        "Lidocaína",
+        "Bupivacaína",
+        "Procaína",
+        "Ropivacaína"
+      ],
+      "c": 2
+    },
+    {
+      "q": "La bradicardia asociada a la anestesia espinal se debe principalmente a:",
+      "a": [
+        "Hipovolemia",
+        "Estimulación vagal",
+        "Bloqueo de las fibras simpáticas cardíacas",
+        "Hipoxia"
+      ],
+      "c": 2
+    },
+    {
+      "q": "¿Qué indica un aumento del EtCO₂ durante la anestesia?",
+      "a": [
+        "Hiperventilación",
+        "Fuga en el circuito",
+        "Hipoventilación",
+        "Apnea"
+      ],
+      "c": 2
+    },
+    {
+      "q": "Durante la inducción de secuencia rápida, se aplica presión cricoidea para:",
+      "a": [
+        "Facilitar la intubación",
+        "Evitar el paso de aire al esófago",
+        "Prevenir aspiración gástrica",
+        "Disminuir el tono laríngeo"
+      ],
+      "c": 2
+    },
+    {
+      "q": "El halotano está en desuso principalmente por:",
+      "a": [
+        "Hepatotoxicidad",
+        "Arritmias",
+        "Costo elevado",
+        "Baja potencia"
+      ],
+      "c": 0
+    },
+    {
+      "q": "En anestesia regional, la adición de epinefrina al anestésico local:",
+      "a": [
+        "Prolonga la duración del bloqueo",
+        "Aumenta la toxicidad",
+        "Disminuye la analgesia",
+        "Acelera la absorción"
+      ],
+      "c": 0
+    },
+    {
+      "q": "El agente más apropiado para la inducción en pacientes asmáticos es:",
+      "a": [
+        "Etomidato",
+        "Propofol",
+        "Tiopental",
+        "Midazolam"
+      ],
+      "c": 1
+    },
+    {
+      "q": "En caso de hipertermia maligna, el tratamiento específico es:",
+      "a": [
+        "Furosemida",
+        "Dantroleno",
+        "Diazepam",
+        "Dexmedetomidina"
+      ],
+      "c": 1
+    },
+    {
+      "q": "En anestesia general, la causa más frecuente de hipoxia al inicio de la ventilación mecánica es:",
+      "a": [
+        "Atelectasias",
+        "Neumotórax",
+        "Broncoespasmo",
+        "Desconexión del circuito"
+      ],
+      "c": 0
+    },
+    {
+      "q": "¿Qué significa un valor de EtCO₂ de 0 mmHg tras intubación?",
+      "a": [
+        "Intubación esofágica",
+        "Hiperventilación",
+        "Apnea",
+        "Fuga en el tubo"
+      ],
+      "c": 0
+    },
+    {
+      "q": "En el manejo del dolor postoperatorio, la analgesia multimodal busca:",
+      "a": [
+        "Reducir el uso de opioides",
+        "Prolongar la sedación",
+        "Evitar el uso de anestésicos locales",
+        "Aumentar la somnolencia"
+      ],
+      "c": 0
+    },
+    {
+      "q": "¿Cuál es la forma más confiable de confirmar la intubación endotraqueal?",
+      "a": [
+        "Condensación en el tubo",
+        "Auscultación bilateral",
+        "Capnografía continua",
+        "Elevación del tórax"
+      ],
+      "c": 2
+    },
+    {
+      "q": "El signo más precoz de toxicidad sistémica por anestésicos locales es:",
+      "a": [
+        "Convulsiones",
+        "Hipotensión",
+        "Parestesias peribucales",
+        "Arritmias"
+      ],
+      "c": 2
+    },
+    {
+      "q": "En pacientes con enfermedad coronaria, el agente más estable hemodinámicamente para inducción es:",
+      "a": [
+        "Etomidato",
+        "Propofol",
+        "Tiopental",
+        "Midazolam"
+      ],
+      "c": 0
+    },
+    {
+      "q": "La posición de Trendelenburg produce:",
+      "a": [
+        "Hipotensión",
+        "Aumento del retorno venoso",
+        "Disminución del gasto cardíaco",
+        "Reducción de la presión intracraneal"
+      ],
+      "c": 1
+    },
+    {
+      "q": "Durante anestesia, el monitoreo del EtCO₂ sirve para:",
+      "a": [
+        "Evaluar la ventilación alveolar",
+        "Medir oxigenación",
+        "Calcular la presión inspiratoria",
+        "Controlar el pulso"
+      ],
+      "c": 0
+    },
+    {
+      "q": "El efecto secundario más frecuente del bloqueo epidural es:",
+      "a": [
+        "Bradicardia",
+        "Hipotensión",
+        "Náuseas",
+        "Dolor lumbar"
+      ],
+      "c": 1
+    },
+    {
+      "q": "En la anestesia obstétrica, el anestésico local más usado en epidural es:",
+      "a": [
+        "Procaína",
+        "Bupivacaína",
+        "Lidocaína",
+        "Ropivacaína"
+      ],
+      "c": 1
+    },
+    {
+      "q": "¿Qué medicamento revierte el bloqueo neuromuscular no despolarizante?",
+      "a": [
+        "Naloxona",
+        "Flumazenilo",
+        "Neostigmina",
+        "Atropina"
+      ],
+      "c": 2
+    },
+    {
+      "q": "En pacientes ancianos, la dosis de anestésicos debe ser:",
+      "a": [
+        "Igual que en jóvenes",
+        "Aumentada",
+        "Reducida",
+        "Dependiente del peso"
+      ],
+      "c": 2
+    },
+    {
+      "q": "En anestesia regional, si el paciente presenta disnea, lo primero es:",
+      "a": [
+        "Administrar oxígeno",
+        "Evaluar la extensión del bloqueo cervical",
+        "Suspender la infusión",
+        "Cambiar la posición"
+      ],
+      "c": 1
+    },
+    {
+      "q": "En cirugía laparoscópica, el CO₂ utilizado para el neumoperitoneo puede causar:",
+      "a": [
+        "Hipoxia",
+        "Hipercapnia",
+        "Alcalosis respiratoria",
+        "Bradicardia"
+      ],
+      "c": 1
+    },
+    {
+      "q": "En anestesia total intravenosa (TIVA), la principal ventaja es:",
+      "a": [
+        "Inicio más lento",
+        "Menor contaminación ambiental",
+        "Mayor variabilidad hemodinámica",
+        "Mayor riesgo de náusea"
+      ],
+      "c": 1
+    },
+    {
+      "q": "La atropina se administra antes de la inducción en pediatría para:",
+      "a": [
+        "Prevenir bradicardia",
+        "Inducir midriasis",
+        "Reducir secreciones",
+        "Aumentar la sedación"
+      ],
+      "c": 0
+    },
+    {
+      "q": "En caso de anafilaxia intraoperatoria, el fármaco de elección es:",
+      "a": [
+        "Adrenalina",
+        "Hidrocortisona",
+        "Difenhidramina",
+        "Dexametasona"
+      ],
+      "c": 0
+    },
+    {
+      "q": "En anestesia espinal, el nivel de punción más común es:",
+      "a": [
+        "L3–L4",
+        "L1–L2",
+        "L5–S1",
+        "T12–L1"
+      ],
+      "c": 0
+    },
+    {
+      "q": "En trauma craneal, el agente ideal para la inducción es:",
+      "a": [
+        "Propofol",
+        "Etomidato",
+        "Tiopental",
+        "Ketamina"
+      ],
+      "c": 1
+    },
+    {
+      "q": "El óxido nitroso está contraindicado en:",
+      "a": [
+        "Neumotórax",
+        "Apendicectomía",
+        "Cesárea",
+        "Hernioplastía"
+      ],
+      "c": 0
+    },
+    {
+      "q": "En pacientes obesos, la preoxigenación debe durar al menos:",
+      "a": [
+        "30 segundos",
+        "1 minuto",
+        "3 minutos",
+        "5 minutos"
+      ],
+      "c": 2
+    },
+    {
+      "q": "Los opioides durante mantenimiento anestésico buscan:",
+      "a": [
+        "Atenuar respuesta al estímulo quirúrgico",
+        "Mejorar ventilación",
+        "Reducir temperatura corporal",
+        "Aumentar tono muscular"
+      ],
+      "c": 0
+    },
+    {
+      "q": "Una punción “sangrante” durante anestesia regional sugiere:",
+      "a": [
+        "Punción subaracnoidea",
+        "Lesión vascular",
+        "Mala técnica",
+        "Contaminación"
+      ],
+      "c": 1
+    },
+    {
+      "q": "Antes de la extubación, debe confirmarse:",
+      "a": [
+        "Movimientos respiratorios espontáneos adecuados",
+        "Reflejo tusígeno",
+        "Temperatura corporal normal",
+        "Saturación de 100 %"
+      ],
+      "c": 0
+    },
+    {
+      "q": "En cirugía de urgencia, el ayuno mínimo para líquidos claros es:",
+      "a": [
+        "4 horas",
+        "2 horas",
+        "6 horas",
+        "8 horas"
+      ],
+      "c": 1
+    },
+    {
+      "q": "En pacientes con EPOC, la FiO₂ debe ajustarse para:",
+      "a": [
+        "Evitar depresión del estímulo respiratorio",
+        "Reducir hipercapnia",
+        "Mejorar ventilación",
+        "Prevenir hipoxia"
+      ],
+      "c": 0
+    },
+    {
+      "q": "En cirugías prolongadas, el método más fiable de control térmico es:",
+      "a": [
+        "Nasofaríngeo",
+        "Axilar",
+        "Cutáneo",
+        "Rectal"
+      ],
+      "c": 0
+    },
+    {
+      "q": "La oximetría de pulso mide directamente:",
+      "a": [
+        "Tensión arterial de oxígeno",
+        "Saturación de oxígeno arterial estimada (SpO₂)",
+        "Contenido total de oxígeno",
+        "PaO₂"
+      ],
+      "c": 1
+    },
+    {
+      "q": "En un paciente con mala perfusión periférica, la lectura de SpO₂ puede:",
+      "a": [
+        "Ser más precisa",
+        "Ser falsamente baja",
+        "Ser más alta",
+        "No verse afectada"
+      ],
+      "c": 1
+    },
+    {
+      "q": "¿Cuál es el rango normal de SpO₂ en un paciente sano?",
+      "a": [
+        "90–94 %",
+        "85–90 %",
+        "95–100 %",
+        "100–105 %"
+      ],
+      "c": 2
+    },
+    {
+      "q": "Si el oxímetro muestra baja saturación, pero el paciente está estable y rosado, lo primero es:",
+      "a": [
+        "Administrar oxígeno",
+        "Cambiar el sensor",
+        "Verificar la colocación del sensor",
+        "Intubar"
+      ],
+      "c": 2
+    },
+    {
+      "q": "En pacientes con anemia severa, la oximetría de pulso puede:",
+      "a": [
+        "Sobreestimar la oxigenación real",
+        "Subestimar la oxigenación",
+        "No verse afectada",
+        "Duplicar la lectura"
+      ],
+      "c": 0
+    }
+  ]
+}

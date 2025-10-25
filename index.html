@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bienvenida</title>
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body class="welcome">
+  <!-- Fondo principal -->
+  <div class="bg" aria-hidden="true"></div>
+
+  <!-- Imagen decorativa superior -->
+  <div class="deco-top" aria-hidden="true">
+    <img src="./images/deco.png" alt="" />
+  </div>
+
+  <!-- Contenido centrado -->
+  <main class="hero">
+    <img class="logo" src="./images/logoprincipal.png" alt="Logo" />
+    <p class="tagline">¡Juega y gana premios increibles!</p>
+    <nav class="btns">
+      <a class="neonbtn" href="trivia.html"  aria-label="Jugar Trivia"><span>TRIVIA</span></a>
+      <a class="neonbtn" href="memoria.html" aria-label="Jugar Memoria"><span>MEMORIA</span></a>
+      <a class="neonbtn" href="ruleta.html"  aria-label="Jugar Ruleta"><span>RULETA</span></a>
+    </nav>
+  </main>
+
+  <script>
+  /* Parallax de la imagen decorativa usando variables CSS (no pisa transform) */
+  (function () {
+    const img = document.querySelector('.deco-top img');
+    if (!img) return;
+    const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+
+    function apply(x, y){
+      img.style.setProperty('--px', x + 'px');
+      img.style.setProperty('--py', y + 'px');
+    }
+
+    window.addEventListener('pointermove', (e) => {
+      const w = innerWidth, h = innerHeight;
+      const dx = (e.clientX / w - 0.5) * 12; // ±12px
+      const dy = (e.clientY / h - 0.5) * 10; // ±10px
+      apply(clamp(dx, -14, 14), clamp(dy, -12, 12));
+    }, { passive: true });
+
+    // Posición inicial
+    apply(6, 4);
+  })();
+
+  // Ripple: coloca el centro en la posición del toque/click
+  document.addEventListener('pointerdown', (e) => {
+    const btn = e.target.closest('.neonbtn');
+    if(!btn) return;
+    const r = btn.getBoundingClientRect();
+    btn.style.setProperty('--mx', `${e.clientX - r.left}px`);
+    btn.style.setProperty('--my', `${e.clientY - r.top}px`);
+  }, { passive: true });
+
+  // Typewriter de la tagline
+  (function(){
+  const el = document.querySelector('.tagline');
+  if(!el) return;
+
+  const text       = el.textContent.trim();
+  const speedMs    = 35;   // menor = más rápido
+  const startDelay = 250;  // espera antes de empezar
+
+  // preparar
+  el.textContent = "";
+  el.classList.add('typer');
+
+  // cursor CSS (blink)
+  const style = document.createElement('style');
+  style.textContent = `
+    .tagline.typer::after{
+      content:"|";
+      margin-left: 6px;
+      opacity: .85;
+      animation: caretBlink 1s step-end infinite;
+    }
+    @keyframes caretBlink{ 50%{ opacity: 0; } }
+    @media (prefers-reduced-motion: reduce){
+      .tagline.typer::after{ animation: none; }
+    }
+  `;
+  document.head.appendChild(style);
+
+  let i = 0;
+  const type = () => {
+    if(i <= text.length){
+      el.textContent = text.slice(0, i);
+      i++;
+      setTimeout(type, speedMs);
+    } else {
+      // Quitar el cursor al terminar
+      el.classList.remove('typer');      // <-- esta línea elimina el “|”
+    }
+  };
+  setTimeout(type, startDelay);
+})();
+  </script>
+</body>
+</html>

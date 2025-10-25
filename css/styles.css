@@ -1,0 +1,440 @@
+/* Advent Pro (local, offline) */
+@font-face {
+  font-family: "Advent Pro";
+  src: url("../fonts/AdventPro-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Advent Pro";
+  src: url("../fonts/AdventPro-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============ Variables globales ============ */
+:root {
+  /* Layout welcome */
+  --logo-max-w: 700px;
+  --content-w: 90vw;
+  --gap-lg: 24px;
+  --gap-sm: 34px;
+  --top-margin: 8vh;
+  --text-size: clamp(56px, 2.2vh, 22px);
+  --logo-shift: -100px; /* positivo = baja el logo, negativo = sube el logo */
+  --text-shift: -160px; /* positivo = baja el texto, negativo = sube el texto */
+  --btn-shift: -100px;  /* positivo = baja los botones, negativo = sube los botones */
+
+  /* Botón neón */
+  --neon-border: 8px;
+  --neon-radius: 16px;
+  --neon-font: clamp(52px, 3vh, 36px);
+
+  /* Niveles de brillo (externo + interno) */
+  --neon-outer-1: 0 0 14px rgba(255,255,255,.95), 0 0 36px rgba(255,255,255,.85);
+  --neon-outer-2: 0 0 22px rgba(255,255,255,1),   0 0 56px rgba(255,255,255,.95), 0 0 96px rgba(255,255,255,.9);
+  --neon-inner-1: inset 0 0 8px  rgba(255,255,255,.70), inset 0 0 16px rgba(255,255,255,.55);
+  --neon-inner-2: inset 0 0 14px rgba(255,255,255,.85), inset 0 0 26px rgba(255,255,255,.70);
+
+  /* (Compat) valores antiguos usados en animaciones previas */
+  --neon-glow:        0 0 8px #fff, 0 0 18px #fff;
+  --neon-glow-strong: 0 0 10px #fff, 0 0 24px #fff;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  color: #fff;
+  font-family: "Advent Pro", system-ui, Arial, sans-serif;
+}
+
+/* Fondo principal a pantalla completa */
+.bg {
+  position: fixed;
+  inset: 0;
+  background: #000 url("../images/fondoprincipal.png") center/cover no-repeat;
+  z-index: 0;
+}
+
+/* Decorativo superior centrado */
+.deco-top {
+  position: fixed;
+  top: -30px;
+  left: 500px;
+  right: 0;
+  height: 32vh;
+  display: grid;
+  place-items: center;
+  z-index: 1;
+}
+.deco-top img {
+  width: min(55vw, 1200px);
+  height: auto;
+}
+
+/* Contenido centrado en columna */
+.welcome {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+}
+.hero {
+  position: relative;
+  z-index: 2; /* sobre el decorativo */
+  width: min(var(--content-w), 860px);
+  margin-top: var(--top-margin);
+  display: grid;
+  grid-auto-rows: max-content;
+  align-items: center;
+  justify-items: center;
+  row-gap: var(--gap-lg);
+  text-align: center;
+}
+
+/* Logo centrado */
+.logo{
+  width: 100%;
+  max-width: var(--logo-max-w);
+  height: auto;
+  transform: translate3d(0, var(--logo-shift), 0); /* mueve solo el logo */
+  will-change: transform;
+}
+
+/* Texto debajo del logo */
+.tagline {
+  margin: 0;
+  transform: translate3d(0, var(--text-shift), 0);
+  font-size: var(--text-size);
+}
+
+/* Botonera */
+.btns {
+  width: 70%;
+  display: grid;
+  row-gap: var(--gap-sm);
+  margin: 0 auto;
+  transform: translate3d(0, var(--btn-shift), 0);
+}
+
+/* ================= Botón neón ================= */
+.neonbtn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: 860px;
+  height: clamp(64px, 8vh, 100px);
+  margin: 0 auto;
+
+  background: transparent; /* sin relleno */
+  color: #fff;
+  text-decoration: none;
+
+  border: var(--neon-border) solid #fff;
+  border-radius: var(--neon-radius);
+
+  /* BASE: ambos brillos visibles */
+  box-shadow: var(--neon-outer-1), var(--neon-inner-1);
+
+  font-size: var(--neon-font);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.neonbtn > span {
+  line-height: 1;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.55);
+}
+
+/* Hover: sube ambos brillos */
+.neonbtn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--neon-outer-2), var(--neon-inner-2);
+}
+.neonbtn:active {
+  transform: translateY(1px) scale(.992); /* micro hundimiento */
+  box-shadow: var(--neon-outer-1), var(--neon-inner-1);
+}
+
+/* Accesible */
+.neonbtn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px #000,
+    0 0 0 6px #fff,
+    var(--neon-outer-2),
+    var(--neon-inner-2);
+}
+
+/* Ajuste para pantallas verticales grandes (1080x1920) */
+@media (orientation: portrait) and (min-height: 1700px) {
+  :root {
+    --content-w: 86vw;
+    --top-margin: 10vh;
+  }
+}
+
+/* Variante compacta */
+@media (max-width: 480px) {
+  .neonbtn { max-width: 94vw; }
+}
+
+/* ==== ANIMACIONES (añadidos) ==== */
+
+/* Fondo: zoom muy sutil (no cambia layout) */
+.bg{
+  will-change: transform;
+  animation: bgZoom 60s ease-in-out infinite alternate;
+}
+@keyframes bgZoom{
+  from{ transform: scale(1); }
+  to{   transform: scale(1.06); }
+}
+
+/* Entrada suave del logo + pulso leve de brillo */
+.logo{
+  animation: logoFade .8s ease-out both, logoGlow 4s ease-in-out .8s infinite;
+}
+@keyframes logoFade{
+  from{ opacity: 0; filter: blur(4px); }
+  to{   opacity: 1; filter: blur(0); }
+}
+@keyframes logoGlow{
+  0%,100%{
+    filter: drop-shadow(0 0 6px rgba(255,255,255,.55));
+  }
+  50%{
+    filter: drop-shadow(0 0 14px rgba(255,255,255,.9)) drop-shadow(0 0 28px rgba(255,255,255,.75));
+  }
+}
+
+/* Tagline: aparición suave */
+.tagline{
+  opacity: 0;
+  animation: taglineIn .9s ease-out .1s forwards;
+}
+@keyframes taglineIn{
+  to{ opacity: 1; }
+}
+
+/* Entrada escalonada de cada botón + pulso del brillo (animando EXTERNO y dejando INTERNO visible) */
+.btns .neonbtn{
+  opacity: 0;
+  animation:
+    btnIn .6s ease-out forwards,
+    btnGlow 2.2s ease-in-out .2s infinite alternate;
+}
+.btns .neonbtn:nth-child(1){ animation-delay: .10s, .20s; }
+.btns .neonbtn:nth-child(2){ animation-delay: .52s, .20s; }
+.btns .neonbtn:nth-child(3){ animation-delay: .94s, .20s; }
+
+@keyframes btnIn{
+  from{ transform: translateY(10px); opacity:0; }
+  to  { transform: translateY(0);    opacity:1; }
+}
+/* Pulso: EXTERNO varía, INTERNO se mantiene (y no desaparece) */
+@keyframes btnGlow{
+  from { box-shadow: var(--neon-outer-1), var(--neon-inner-1); }
+  to   { box-shadow: var(--neon-outer-2), var(--neon-inner-1); }
+}
+
+/* Destello que recorre el borde */
+.neonbtn::before{
+  content:"";
+  position:absolute; inset:-2px;
+  border-radius: var(--neon-radius);
+  pointer-events: none;
+  background:
+    conic-gradient(from 0deg, transparent 0 20deg, rgba(255,255,255,.55) 21deg 25deg, transparent 26deg 360deg);
+  -webkit-mask:
+    radial-gradient(farthest-side, transparent calc(100% - var(--neon-border) - 2px), #000 calc(100% - var(--neon-border) - 1px));
+          mask:
+    radial-gradient(farthest-side, transparent calc(100% - var(--neon-border) - 2px), #000 calc(100% - var(--neon-border) - 1px));
+  animation: sweep 2.8s linear infinite;
+  opacity: .9;
+}
+@keyframes sweep{ to { transform: rotate(360deg); } }
+
+/* Ripple táctil/ratón (usa --mx/--my) */
+.neonbtn::after{
+  content:"";
+  position:absolute; inset:0;
+  border-radius: var(--neon-radius);
+  pointer-events:none;
+  background:
+    radial-gradient(240px 240px at var(--mx,50%) var(--my,50%), rgba(255,255,255,.18), transparent 60%);
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+.neonbtn:is(:hover,:active)::after{ opacity:.9; }
+
+/* ===== Entrada del logo (pop + rebote), compatible con tu --logo-shift ===== */
+.logo{
+  /* combinamos con tu translate3d existente usando propiedades individuales */
+  will-change: opacity, scale, translate;
+  animation:
+    logoIntro 720ms cubic-bezier(.22,.9,.25,1) both,   /* entrada */
+    logoGlow 4s ease-in-out .8s infinite;              /* tu glow continuo */
+}
+
+@keyframes logoIntro{
+  0%   { opacity: 0; scale: .90; translate: 0 -16px; }
+  60%  { opacity: 1; scale: 1.5; translate: 0 8px;  }  /* overshoot */
+  100% { opacity: 1; scale: 1;    translate: 0 0;    }
+}
+
+/* ===== Trivia ===== */
+.trivia-wrap{
+  display: grid;
+  place-items: center;
+  padding: clamp(12px, 2.6vh, 24px);
+}
+
+.trivia-card{
+  width: min(92vw, 860px);
+}
+
+.trivia-header{
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.pill{
+  padding: 8px 12px;
+  border: 1px solid rgba(255,255,255,.6);
+  border-radius: 999px;
+  font-size: clamp(14px, 1.8vh, 18px);
+}
+.pill.score{ border-color: rgba(255,255,255,.35); }
+
+.trivia-card .q{
+  margin: 10px 0 16px;
+  font-size: clamp(20px, 2.6vh, 28px);
+}
+
+.answers{
+  display: grid;
+  gap: 12px;
+}
+
+.ans{
+  width: 100%;
+  min-height: 64px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 2px solid rgba(255,255,255,.9);
+  background: rgba(255,255,255,.02);
+  color: #fff;
+  font-size: clamp(18px, 2.2vh, 22px);
+  letter-spacing: .3px;
+  text-align: left;
+  box-shadow: inset 0 0 10px rgba(255,255,255,.08);
+  transition: transform .08s ease, background .12s ease, border-color .12s ease, box-shadow .12s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.ans span{ pointer-events: none; }
+.ans:hover{ transform: translateY(-1px); background: rgba(255,255,255,.06); }
+.ans:active{ transform: translateY(0); }
+
+.ans.ok{
+  border-color: #22c55e;
+  background: rgba(34,197,94,.12);
+  box-shadow: 0 0 16px rgba(34,197,94,.35), inset 0 0 10px rgba(34,197,94,.18);
+}
+.ans.bad{
+  border-color: #ef4444;
+  background: rgba(239,68,68,.12);
+  box-shadow: 0 0 16px rgba(239,68,68,.35), inset 0 0 10px rgba(239,68,68,.18);
+}
+
+.actions{
+  display: grid;
+  place-items: center;
+  margin-top: 16px;
+}
+.neonbtn.small{
+  height: 56px;
+  font-size: clamp(16px, 2vh, 18px);
+  border-width: 4px;
+  width: min(320px, 60vw);
+}
+
+.loading, .error{
+  text-align: center;
+  opacity: .85;
+  padding: 16px;
+}
+
+.trivia-result{
+  text-align: center;
+}
+.trivia-result h3{
+  margin: 0 0 8px;
+  font-size: clamp(22px, 2.6vh, 28px);
+}
+.result-actions{
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+  place-items: center;
+}
+.result-actions .neonbtn{
+  width: min(360px, 70vw);
+}
+
+
+
+/* ====== Selección de bloques (Trivia) ====== */
+.block-grid{
+  display: grid;
+  gap: 16px;
+  width: min(92vw, 860px);
+  margin: 12px auto 0;
+}
+
+/* Reutiliza tu botón neón; aquí solo ajusto el interior */
+.block-btn{
+  height: clamp(72px, 9vh, 110px);
+  display: grid;
+  grid-template-rows: auto auto;
+  align-content: center;
+  gap: 6px;
+}
+.block-btn span{
+  font-size: clamp(18px, 2.4vh, 22px);
+  line-height: 1;
+}
+.block-btn small{
+  opacity: .85;
+  font-size: clamp(14px, 1.8vh, 16px);
+  line-height: 1;
+}
+
+/* deshabilitado si faltan preguntas para ese bloque */
+.block-btn:disabled{
+  opacity: .45;
+  pointer-events: none;
+  filter: grayscale(1);
+}
+
+.actions.two{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  justify-items: stretch;
+}
+.neonbtn.ghost{
+  background: transparent;
+  border-color: rgba(255,255,255,.65);
+  box-shadow: var(--neon-inner-1); /* leve brillo interno */
+}
