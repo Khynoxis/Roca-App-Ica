@@ -6,6 +6,9 @@ body{
   color: #fff;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
+html, body {
+  overflow-x: hidden;
+}
 
 /* Contenedor principal: alineado a la izquierda */
 
@@ -127,4 +130,85 @@ progress::-moz-progress-bar{ background: #ffffffcc; border-radius: 999px; }
   42%  { transform: translateX(-50%) scale(1.10); }
   70%  { transform: translateX(-50%) scale(1); }
   100% { transform: translateX(-50%) scale(1); }
+}
+
+/* Animación de entrada para QUIZ TIME */
+@keyframes slideInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-80px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#play h1 {
+  animation: slideInDown 0.8s cubic-bezier(.22,.61,.36,1) both;
+}
+
+/* Animación de entrada para la pregunta */
+@keyframes fadeUpIn {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#qtext {
+  animation: fadeUpIn 0.7s ease-out both;
+}
+
+/* Animación para las alternativas */
+@keyframes fadeScaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(.9) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+#answers button {
+  animation: fadeScaleIn .45s ease-out both;
+  animation-delay: calc(var(--i, 0) * 0.09s);
+}
+
+
+/* Cuando la respuesta se marque correcta o incorrecta, asegurar texto blanco */
+#answers button[style*="background-color: rgb(34, 197, 94)"],
+#answers button[style*="background-color: rgb(239, 68, 68)"] {
+  color: #fff !important;
+}
+
+
+/* ===== Animaciones de entrada del título ===== */
+
+@keyframes slideInRightFast {
+  0% { opacity: 0; transform: translateX(-220px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInLeftFast {
+  0% { opacity: 0; transform: translateX(220px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+#title-quiz, #title-time {
+  display: inline-block;
+}
+
+/* Evitamos que se muevan fuera del gran tamaño */
+#title-quiz {
+  animation: slideInRightFast 1.35s cubic-bezier(.22,.61,.36,1) both;
+}
+#title-time {
+  animation: slideInLeftFast 1.35s cubic-bezier(.22,.61,.36,1) both;
 }
