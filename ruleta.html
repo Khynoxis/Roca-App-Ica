@@ -1,25 +1,762 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Ruleta</title>
-  <link rel="stylesheet" href="./css/styles.css"/>
-</head>
-<body>
-  <header class="toolbar">
-    <button onclick="location.href='index.html'">← Volver</button>
-    <h2>Ruleta</h2>
-  </header>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Ruleta (10 imágenes personalizadas)</title>
+    <style>
+      /* Fondo básico */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      body {
+        background: #000 url("images/fondoruleta.png") center/cover no-repeat
+          fixed;
+        color: #fff;
+        font-family: system-ui, Arial, sans-serif;
+      }
 
-  <main class="panel">
-    <div class="ruleta">
-      <div id="wheel"></div>
+      /* Layout sencillo */
+      #app {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        align-items: center;
+        justify-items: center;
+      }
+
+      .top,
+      .bottom {
+        text-align: center;
+        padding: 8px;
+      }
+      .badge {
+        display: inline-block;
+        padding: 6px 12px;
+        background: #d60000;
+        color: #fff;
+        font-weight: 700;
+      }
+      .title {
+        margin: 8px 0 0;
+        font-size: 24px;
+      }
+
+      .stage {
+        top: 100px;
+        width: min(92vmin, 850px);
+        aspect-ratio: 1;
+        display: grid;
+        place-items: center;
+        position: relative;
+      }
+      .wheel {
+        width: 100%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        transition: transform 5s cubic-bezier(0.12, 0.62, 0.02, 1);
+        transform: rotate(var(--deg, 0deg));
+      }
+      canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      /* Confeti y capa de tap */
+      #confetti {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+      }
+      #tap-layer {
+        position: fixed;
+        inset: 0;
+        background: transparent;
+        border: 0;
+      }
+      /* PUNTERO ARRIBA — APUNTANDO HACIA ABAJO */
+      .pointer {
+        /* ✅ Ajusta aquí el tamaño del puntero */
+        --ptr-width: 40px; /* ancho de cada lado del triángulo — cambia esto */
+        --ptr-height: 120px; /* alto del triángulo — cambia esto */
+        --ptr-enter: 0; /* cuánto “entra” sobre la ruleta — negativo = más adentro */
+
+        position: absolute;
+        top: var(--ptr-enter);
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 5;
+
+        width: 0;
+        height: 0;
+        border-left: var(--ptr-width) solid transparent;
+        border-right: var(--ptr-width) solid transparent;
+        border-top: var(--ptr-height) solid #000; /* ⇩ apunta hacia abajo */
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+      }
+
+      /* Layout sencillo (mantenemos tu grid pero con gaps) */
+      #app {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        align-items: center;
+        justify-items: center;
+        /* gap vertical controlado por perillas */
+        row-gap: var(--space-mid);
+        padding-top: calc(env(safe-area-inset-top, 0px) + var(--space-top));
+        padding-bottom: calc(
+          env(safe-area-inset-bottom, 0px) + var(--space-bot)
+        );
+      }
+
+      /* Bloque superior (badge + title) */
+      .top {
+        text-align: center;
+        padding: 0; /* limpiamos padding fijo */
+        display: grid;
+        gap: 8px; /* espacio pequeño entre badge y title */
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+   /* ===== Perillas independientes (NO comparten variables) ===== */
+:root{
+  /* Badge */
+  --badge-left-vp: 60%;     /* 0–100% del ancho de la ventana */
+  --badge-top-vp:  260px;    /* px desde la parte superior */
+  --badge-scale:   1;
+  --badge-rotate:  -8deg;
+  --badge-size:    clamp(34px, 2.6vmin, 26px);
+  --badge-pad-y:   0.60em;
+  --badge-pad-x:   0.90em;
+  --badge-radius:  10px;
+  --badge-z:       60;
+
+  /* Title (totalmente independiente del badge) */
+  --title-left-vp: 50%;
+  --title-top-vp:  88px;    /* mueve el título sin afectar el badge */
+  --title-scale:   1;
+  --title-size:    clamp(180px, 3.4vmin + 4px, 48px);
+  --title-weight:  800;
+  --title-track:   0.4px;
+
+  --title-z:       50;
+
+}
+
+
+/* Badge fijo: no afecta el flujo ni a otros elementos */
+.badge{
+  position: fixed;
+  left: var(--badge-left-vp);
+  top:  var(--badge-top-vp);
+  transform: translateX(-50%) rotate(var(--badge-rotate)) scale(var(--badge-scale));
+  transform-origin: center;
+  z-index: var(--badge-z);
+  pointer-events: none; /* no bloquea taps en la ruleta */
+  font-family: "Munito", system-ui, Arial, sans-serif;
+
+  display: inline-block;
+  background: #d60000;
+  color: #fff;
+  font-weight: 900;
+  font-size: var(--badge-size);
+  padding: var(--badge-pad-y) var(--badge-pad-x);
+  letter-spacing: 10px;
+  line-height: 1;
+  text-transform: uppercase;
+  box-shadow: 0 1px 0 rgba(0,0,0,.25);
+}
+
+@font-face {
+  font-family: "Anton";
+  src: url("../public/fonts/Anton-Regular.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Munito";
+  src: url("../public/fonts/Nunito.ttf") format("truetype");
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Título fijo: independiente del badge */
+.title{
+  font-family: "Anton", system-ui, Arial, sans-serif;
+  position: fixed;
+  left: var(--title-left-vp);
+  top:  var(--title-top-vp);
+  transform: translateX(-50%) scale(var(--title-scale));
+  z-index: var(--title-z);
+  pointer-events: none;
+
+  margin: 0;
+  font-size: var(--title-size);
+  font-weight: var(--title-weight);
+  letter-spacing: 5px;
+  line-height: 1.1;
+  max-width: min(90vw, 900px);
+  text-align: center;
+  white-space: nowrap;   /* 1 línea; quítalo para multilinea */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 2px rgba(0,0,0,.35);
+}
+
+
+      /* Texto inferior */
+      .bottom {
+        text-align: center;
+        padding: 0; /* limpiamos padding fijo */
+      }
+
+      #bottom-text {
+        position: fixed;
+        left: 50%;
+        bottom: clamp(200px, 4vmin, 40px);
+        transform: translateX(-50%);
+        z-index: 10;
+        pointer-events: none;
+
+        max-width: min(92vw, 900px);
+        text-align: center;
+
+        /* 🔒 una sola línea */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        /* tipografía */
+        font-style: italic;
+        font-size: clamp(56px, 2.5vmin + 6px, 28px);
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: 0.2px;
+        opacity: 0.95;
+
+        /* asegúrate de NO tener esto en otra regla:
+     text-wrap: balance;  (quítalo si aparece) */
+        hyphens: none;
+        -webkit-hyphens: none;
+      }
+
+      #bottom-text {
+        text-shadow: 0 0 6px rgba(255, 255, 255, 0.35);
+        animation: glowPulse 1.2s ease-in-out infinite;
+      }
+
+      @keyframes glowPulse {
+        0%,
+        100% {
+          transform: translateX(-50%) scale(1.2);
+          text-shadow: 0 0 6px rgba(255, 255, 255, 0.35),
+            0 0 18px rgba(255, 255, 255, 0.15);
+        }
+        50% {
+          transform: translateX(-50%) scale(1.04);
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.55),
+            0 0 26px rgba(255, 255, 255, 0.25);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- Textos superiores -->
+      <div class="top">
+        <div class="badge" id="badge-text" style="opacity: 0;">¡SUERTE!</div>
+        <h1 class="title" id="title-text" style="opacity: 0;">RULETA DE REGALOS</h1>
+      </div>
+
+        <div class="badge">¡SUERTE!</div>
+        <h1 class="title">RULETA DE <br> REGALOS</h1>
+      
+      <!-- Ruleta -->
+      <div class="stage">
+        <div class="pointer"></div>
+        <div class="wheel" id="wheel">
+          <canvas id="wheel-canvas" width="1000" height="1000"></canvas>
+        </div>
+      </div>
+
+      <!-- Texto inferior -->
+      <div class="bottom">
+        <div id="bottom-text" style="opacity: 0"></div>
+      </div>
+
+      <div class="bottom">
+        <div id="bottom-text">¡GIRA LA RULETA Y GANA!</div>
+      </div>
+
+      <!-- Efectos/interacción -->
+      <canvas id="confetti"></canvas>
+      <button id="tap-layer" aria-label="Tocar para girar"></button>
     </div>
-    <button id="spinBtn">Girar</button>
-    <p id="resultado"></p>
-  </main>
 
-  <script src="./js/ruleta.js"></script>
-</body>
+    <script>
+      (function () {
+        // ===== Configuración =====
+        // 10 imágenes (una por partición, en orden horario empezando arriba)
+        const SLOTS = [
+          "images/slot01.png",
+          "images/slot02.png",
+          "images/slot03.png",
+          "images/slot04.png",
+          "images/slot05.png",
+          "images/slot06.png",
+          "images/slot07.png",
+          "images/slot08.png",
+          "images/slot09.png",
+          "images/slot10.png",
+        ];
+        const REDIRECT_URL = "index.html"; // <- cambia si tu archivo se llama distinto
+
+        const TOP_TEXT = "¡Gira la ruleta y gana!";
+        const BADGE_TEXT = "PROMOCIÓN";
+        const BOTTOM_TEXT = "Toca en cualquier parte para comenzar a girar";
+
+        // DOM
+        const wheel = document.getElementById("wheel");
+        const canvas = document.getElementById("wheel-canvas");
+        const ctx = canvas.getContext("2d");
+
+        const confettiCanvas = document.getElementById("confetti");
+        const cctx = confettiCanvas.getContext("2d");
+        document.getElementById("title-text").textContent = TOP_TEXT;
+        document.getElementById("badge-text").textContent = BADGE_TEXT;
+        document.getElementById("bottom-text").textContent = BOTTOM_TEXT;
+        const tapLayer = document.getElementById("tap-layer");
+
+        // DPR
+        const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+
+        // Geometría ruleta
+        const PARTS = 10;
+        const TWO_PI = Math.PI * 2;
+        const SLICE = TWO_PI / PARTS;
+
+        // Colores alternos solicitados + aro exterior blanco
+        const COLORS = ["#fefefe", "#a6a6a6"];
+        const WHITE_RING = 10;
+        const GAP_RING = 22;
+
+        // -------- Precarga robusta de imágenes --------
+        let imgs = new Array(PARTS).fill(null);
+        let loadedCount = 0;
+        let allDecoded = false;
+
+        function loadImage(src, idx) {
+          return new Promise((resolve) => {
+            const im = new Image();
+            im.onload = async () => {
+              // Intenta decodificar para evitar "cargado pero no pintable"
+              if (im.decode) {
+                try {
+                  await im.decode();
+                } catch (e) {
+                  /* fallback si falla decode() */
+                }
+              }
+              imgs[idx] = im;
+              loadedCount++;
+              resolve(true);
+            };
+            im.onerror = () => {
+              imgs[idx] = null;
+              loadedCount++;
+              resolve(false);
+            };
+            im.src = src;
+          });
+        }
+
+        async function preloadAll() {
+          await Promise.all(SLOTS.map((src, i) => loadImage(src, i)));
+          allDecoded = true;
+          drawWheel(); // redibuja con todas listas
+        }
+
+        // -------- Canvas size & draw --------
+        function resizeWheelCanvas() {
+          const box = canvas.parentElement.getBoundingClientRect();
+          const width = Math.max(1, Math.floor(box.width));
+          const height = Math.max(1, Math.floor(box.height));
+          canvas.width = Math.round(width * DPR);
+          canvas.height = Math.round(height * DPR);
+          canvas.style.width = width + "px";
+          canvas.style.height = height + "px";
+          ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+          drawWheel();
+        }
+
+        function drawWheel() {
+          const w = canvas.width / DPR;
+          const h = canvas.height / DPR;
+          if (w <= 0 || h <= 0) return;
+
+          const cx = w / 2,
+            cy = h / 2;
+          ctx.clearRect(0, 0, w, h);
+
+          // Radio máximo disponible hasta el borde del canvas, dejando todo el anillo afuera
+          const R_max = Math.min(w, h) / 2;
+
+          // Radio donde terminan los SECTORES (dentro):
+          const R_sectors = R_max - WHITE_RING - GAP_RING - 1;
+
+          // Radio medio del anillo para trazar el stroke:
+          const R_ringMid = R_sectors + GAP_RING + WHITE_RING / 2;
+
+          // (opcional) disco central
+          const innerR = R_sectors * 0.1;
+
+          for (let i = 0; i < PARTS; i++) {
+            const start = i * SLICE - Math.PI / 2;
+            const end = start + SLICE;
+
+            // Relleno alterno del sector
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.arc(cx, cy, R_sectors, start, end);
+            ctx.closePath();
+            ctx.fillStyle = COLORS[i % 2];
+            ctx.fill();
+
+            // Imagen para el slot i (si está lista)
+            const mid = (start + end) / 2; // ángulo medio del sector
+            const img = imgs[i];
+
+            // Control de tamaño y posición
+            const IMG_SCALE = 0.35; // ajusta si quieres más grande/pequeña
+            const RADIAL = 0.62; // 0.58 = más al centro, 0.68 = más cerca del borde
+            const IMG_MAX = 700;
+
+            const imgSize = Math.min(R_sectors * IMG_SCALE, IMG_MAX);
+            const px = cx + Math.cos(mid) * (R_sectors * RADIAL);
+            const py = cy + Math.sin(mid) * (R_sectors * RADIAL);
+
+            if (img && img.naturalWidth > 0) {
+              // 👉 Rotamos la imagen para que “mire” hacia afuera (radial)
+              // mid apunta desde el centro hacia el sector; sumamos +90° para que la “cabeza” sea radial
+              ctx.save();
+              ctx.translate(px, py);
+              ctx.rotate(mid + Math.PI / 2);
+              ctx.drawImage(img, -imgSize / 2, -imgSize / 2, imgSize, imgSize);
+              ctx.restore();
+            } else {
+              // Placeholder mientras carga o si falla
+              ctx.save();
+              ctx.translate(px, py);
+              ctx.rotate(mid + Math.PI / 2);
+              ctx.fillStyle = "#000";
+              ctx.fillRect(-18, -12, 36, 24);
+              ctx.fillStyle = "#fff";
+              ctx.font = "bold 16px system-ui";
+              ctx.textAlign = "center";
+              ctx.textBaseline = "middle";
+              ctx.fillText(String(i + 1), 0, 0);
+              ctx.restore();
+            }
+          }
+
+          // ===== Centro de la ruleta (perillas) =====
+          const INNER_RATIO = 0.28; // antes 0.25 → disco central = 28% de R_sectors
+          const HUB_RATIO = 0.82; // puntito = 22% del disco central
+          const INNER_FILL = "black";
+          const INNER_STROKE = 0; // px. 0 = sin borde
+          const INNER_STROKE_COLOR = "#ffffff";
+          const HUB_FILL = "#328290";
+
+          // Disco central
+          ctx.beginPath();
+          ctx.arc(cx, cy, innerR, 0, TWO_PI);
+          ctx.fillStyle = INNER_FILL;
+          ctx.fill();
+          if (INNER_STROKE > 0) {
+            ctx.lineWidth = INNER_STROKE;
+            ctx.strokeStyle = INNER_STROKE_COLOR;
+            ctx.stroke();
+          }
+
+          // Punto central
+          ctx.beginPath();
+          ctx.arc(cx, cy, innerR * HUB_RATIO, 0, TWO_PI);
+          ctx.fillStyle = HUB_FILL;
+          ctx.fill();
+
+          // ANILLO BLANCO EXTERIOR con gap transparente antes del anillo
+          ctx.save();
+          ctx.lineWidth = WHITE_RING; // grosor del anillo
+          ctx.strokeStyle = "#ffffff";
+          ctx.beginPath();
+          ctx.arc(cx, cy, R_ringMid, 0, TWO_PI);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // Redibuja cada vez que una imagen termina (para que las “faltantes” aparezcan)
+        // Nota: preloadAll ya llama a drawWheel al final; esto actualiza progresivo.
+        SLOTS.forEach((src, i) => {
+          const im = new Image();
+          im.onload = async () => {
+            if (im.decode) {
+              try {
+                await im.decode();
+              } catch (e) {}
+            }
+            imgs[i] = im;
+            drawWheel();
+          };
+          im.onerror = () => {
+            imgs[i] = null;
+            drawWheel();
+          };
+          im.src = src;
+        });
+
+        // Resize inicial y en cambios
+        if (window.ResizeObserver)
+          new ResizeObserver(resizeWheelCanvas).observe(canvas);
+        else window.addEventListener("resize", resizeWheelCanvas);
+        window.addEventListener("orientationchange", () =>
+          setTimeout(resizeWheelCanvas, 150)
+        );
+
+        // Espera al layout para medir bien y precarga
+        window.addEventListener("load", () => {
+          requestAnimationFrame(resizeWheelCanvas);
+          preloadAll(); // dispara la precarga/decodificación
+        });
+
+        // ---- Giro con tap ----
+        let spinning = false;
+        let currentDeg = 0;
+
+        const sliceDeg = 360 / PARTS; // PARTS = 10
+
+        // Ángulo absoluto para que el CENTRO del slot i (0..9) quede en la punta (arriba)
+        function angleForSlotCenter(i) {
+          // Dibujo parte en -90° (arriba). Centro del slot i: (i+0.5)*sliceDeg - 90°.
+          // Para alinear con la punta, debemos rotar el wheel a:
+          // theta = -((i+0.5)*sliceDeg)
+          return -(i + 0.5) * sliceDeg;
+        }
+
+        // Delta mínima positiva de 'from' a 'to' (ambos en grados)
+        function deltaTo(fromDeg, toDeg) {
+          let d = (toDeg - fromDeg) % 360;
+          if (d < 0) d += 360;
+          return d;
+        }
+
+        // (Opcional) pesos por slot; si no quieres ponderación, borra esto y usa winner = Math.floor(Math.random()*PARTS)
+        const WEIGHTS = Array(PARTS).fill(1); // todos iguales (ajusta si quieres probabilidades distintas)
+        function pickWeighted(weights) {
+          const total = weights.reduce((a, b) => a + Math.max(0, b), 0) || 1;
+          let r = Math.random() * total,
+            acc = 0;
+          for (let i = 0; i < weights.length; i++) {
+            acc += Math.max(0, weights[i]);
+            if (r <= acc) return i;
+          }
+          return weights.length - 1;
+        }
+
+
+
+
+
+        
+        function spin() {
+          if (spinning) return;
+          spinning = true;
+          document.getElementById("bottom-text").textContent = "Girando…";
+
+          // Elige ganador (ponderado o uniforme)
+          const winner = pickWeighted
+            ? pickWeighted(WEIGHTS)
+            : Math.floor(Math.random() * PARTS);
+
+          // Ángulo absoluto para centrar ese slot
+          const targetAbs = angleForSlotCenter(winner); // e.g., -18°, -54°, etc.
+
+          // Calcula cuánto rotar desde la posición actual + vueltas extra (para el efecto)
+          const extraTurns = 5 + Math.floor(Math.random() * 4); // 5–8 vueltas
+          const targetAbsNorm = ((targetAbs % 360) + 360) % 360;
+          const delta = deltaTo(currentDeg, targetAbsNorm);
+          const target = currentDeg + extraTurns * 360 + delta;
+
+          // Aplica la rotación y fija el estado final absoluto
+          wheel.style.setProperty("--deg", target + "deg");
+          currentDeg = targetAbsNorm;
+
+          // Guarda el ganador por si lo quieres usar (toast, premio, etc.)
+          window.__lastWinner = winner;
+        }
+
+        wheel.addEventListener("transitionend", () => {
+          spinning = false;
+          document.getElementById("bottom-text").textContent =
+            "Toca para girar de nuevo";
+
+          redirectPending = true; // <- marcamos que, al acabar confeti, se redirige
+          releaseConfetti(); // lanza confeti
+        });
+
+        tapLayer.addEventListener("click", spin, { passive: true });
+        tapLayer.addEventListener(
+          "touchstart",
+          (e) => {
+            e.preventDefault();
+            spin();
+          },
+          { passive: false }
+        );
+
+        // ---- Confeti básico ----
+        function resizeConfetti() {
+          confettiCanvas.width = window.innerWidth * DPR;
+          confettiCanvas.height = window.innerHeight * DPR;
+          cctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+        }
+        window.addEventListener("resize", resizeConfetti);
+        resizeConfetti();
+
+        let confettiParticles = [];
+        let animating = false;
+        let redirectPending = false;
+
+        function releaseConfetti() {
+          const count = 120;
+          const stage = document
+            .querySelector(".stage")
+            .getBoundingClientRect();
+          const fromX = stage.left + stage.width / 2;
+          const fromY = stage.top + stage.height * 0.2;
+          for (let i = 0; i < count; i++) {
+            confettiParticles.push({
+              x: fromX + (Math.random() * 140 - 70),
+              y: fromY,
+              vx: Math.random() * 6 - 3,
+              vy: -Math.random() * 10 - 6,
+              g: 0.32 + Math.random() * 0.2,
+              size: 6 + Math.random() * 6,
+              rot: Math.random() * Math.PI * 2,
+              vr: (Math.random() - 0.5) * 0.2,
+              alpha: 1,
+              shape: Math.random() < 0.5 ? "rect" : "circle",
+              color: `hsl(${Math.floor(Math.random() * 360)},85%,60%)`,
+            });
+          }
+          if (!animating) animateConfetti();
+        }
+
+        function animateConfetti() {
+          animating = true;
+          const w = confettiCanvas.width / DPR;
+          const h = confettiCanvas.height / DPR;
+          cctx.clearRect(0, 0, w, h);
+
+          confettiParticles.forEach((p) => {
+            p.vy += p.g;
+            p.x += p.vx;
+            p.y += p.vy;
+            p.rot += p.vr;
+            p.alpha -= 0.006;
+            cctx.globalAlpha = Math.max(0, p.alpha);
+            cctx.save();
+            cctx.translate(p.x, p.y);
+            cctx.rotate(p.rot);
+            cctx.fillStyle = p.color;
+            if (p.shape === "rect")
+              cctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+            else {
+              cctx.beginPath();
+              cctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+              cctx.fill();
+            }
+            cctx.restore();
+          });
+          cctx.globalAlpha = 1;
+
+          confettiParticles = confettiParticles.filter(
+            (p) => p.alpha > 0 && p.y < h + 40
+          );
+
+          if (confettiParticles.length > 0) {
+            requestAnimationFrame(animateConfetti);
+          } else {
+            animating = false;
+            // >>> Al acabar el confeti, redirige si está pendiente
+            if (redirectPending) {
+              redirectPending = false; // resetea por si acaso
+              setTimeout(() => {
+                window.location.href = REDIRECT_URL;
+              }, 250); // pequeño colchón para que el último frame se vea
+            }
+          }
+        }
+      })();
+    </script>
+  </body>
 </html>
