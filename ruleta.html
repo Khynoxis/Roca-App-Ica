@@ -126,143 +126,91 @@
         gap: 8px; /* espacio pequeño entre badge y title */
       }
 
+      /* ===== Perillas independientes (NO comparten variables) ===== */
+      :root {
+        /* Badge */
+        --badge-left-vp: 60%; /* 0–100% del ancho de la ventana */
+        --badge-top-vp: 260px; /* px desde la parte superior */
+        --badge-scale: 1;
+        --badge-rotate: -8deg;
+        --badge-size: clamp(34px, 2.6vmin, 26px);
+        --badge-pad-y: 0.6em;
+        --badge-pad-x: 0.9em;
+        --badge-radius: 10px;
+        --badge-z: 60;
 
+        /* Title (totalmente independiente del badge) */
+        --title-left-vp: 50%;
+        --title-top-vp: 88px; /* mueve el título sin afectar el badge */
+        --title-scale: 1;
+        --title-size: clamp(180px, 3.4vmin + 4px, 48px);
+        --title-weight: 800;
+        --title-track: 0.4px;
 
+        --title-z: 50;
+      }
 
+      /* Badge fijo: no afecta el flujo ni a otros elementos */
+      .badge {
+        position: fixed;
+        left: var(--badge-left-vp);
+        top: var(--badge-top-vp);
+        transform: translateX(-50%) rotate(var(--badge-rotate))
+          scale(var(--badge-scale));
+        transform-origin: center;
+        z-index: var(--badge-z);
+        pointer-events: none; /* no bloquea taps en la ruleta */
+        font-family: "Munito", system-ui, Arial, sans-serif;
 
+        display: inline-block;
+        background: #d60000;
+        color: #fff;
+        font-weight: 900;
+        font-size: var(--badge-size);
+        padding: var(--badge-pad-y) var(--badge-pad-x);
+        letter-spacing: 10px;
+        line-height: 1;
+        text-transform: uppercase;
+        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+      }
 
+      @font-face {
+        font-family: "Anton";
+        src: url("../public/fonts/Anton-Regular.ttf") format("truetype");
+        font-weight: 600;
+        font-style: normal;
+        font-display: swap;
+      }
 
+      @font-face {
+        font-family: "Munito";
+        src: url("../public/fonts/Nunito.ttf") format("truetype");
+        font-style: normal;
+        font-display: swap;
+      }
 
+      /* Título fijo: independiente del badge */
+      .title {
+        font-family: "Anton", system-ui, Arial, sans-serif;
+        position: fixed;
+        left: var(--title-left-vp);
+        top: var(--title-top-vp);
+        transform: translateX(-50%) scale(var(--title-scale));
+        z-index: var(--title-z);
+        pointer-events: none;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-   /* ===== Perillas independientes (NO comparten variables) ===== */
-:root{
-  /* Badge */
-  --badge-left-vp: 60%;     /* 0–100% del ancho de la ventana */
-  --badge-top-vp:  260px;    /* px desde la parte superior */
-  --badge-scale:   1;
-  --badge-rotate:  -8deg;
-  --badge-size:    clamp(34px, 2.6vmin, 26px);
-  --badge-pad-y:   0.60em;
-  --badge-pad-x:   0.90em;
-  --badge-radius:  10px;
-  --badge-z:       60;
-
-  /* Title (totalmente independiente del badge) */
-  --title-left-vp: 50%;
-  --title-top-vp:  88px;    /* mueve el título sin afectar el badge */
-  --title-scale:   1;
-  --title-size:    clamp(180px, 3.4vmin + 4px, 48px);
-  --title-weight:  800;
-  --title-track:   0.4px;
-
-  --title-z:       50;
-
-}
-
-
-/* Badge fijo: no afecta el flujo ni a otros elementos */
-.badge{
-  position: fixed;
-  left: var(--badge-left-vp);
-  top:  var(--badge-top-vp);
-  transform: translateX(-50%) rotate(var(--badge-rotate)) scale(var(--badge-scale));
-  transform-origin: center;
-  z-index: var(--badge-z);
-  pointer-events: none; /* no bloquea taps en la ruleta */
-  font-family: "Munito", system-ui, Arial, sans-serif;
-
-  display: inline-block;
-  background: #d60000;
-  color: #fff;
-  font-weight: 900;
-  font-size: var(--badge-size);
-  padding: var(--badge-pad-y) var(--badge-pad-x);
-  letter-spacing: 10px;
-  line-height: 1;
-  text-transform: uppercase;
-  box-shadow: 0 1px 0 rgba(0,0,0,.25);
-}
-
-@font-face {
-  font-family: "Anton";
-  src: url("../public/fonts/Anton-Regular.ttf") format("truetype");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Munito";
-  src: url("../public/fonts/Nunito.ttf") format("truetype");
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Título fijo: independiente del badge */
-.title{
-  font-family: "Anton", system-ui, Arial, sans-serif;
-  position: fixed;
-  left: var(--title-left-vp);
-  top:  var(--title-top-vp);
-  transform: translateX(-50%) scale(var(--title-scale));
-  z-index: var(--title-z);
-  pointer-events: none;
-
-  margin: 0;
-  font-size: var(--title-size);
-  font-weight: var(--title-weight);
-  letter-spacing: 5px;
-  line-height: 1.1;
-  max-width: min(90vw, 900px);
-  text-align: center;
-  white-space: nowrap;   /* 1 línea; quítalo para multilinea */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-shadow: 0 1px 2px rgba(0,0,0,.35);
-}
-
+        margin: 0;
+        font-size: var(--title-size);
+        font-weight: var(--title-weight);
+        letter-spacing: 5px;
+        line-height: 1.1;
+        max-width: min(90vw, 900px);
+        text-align: center;
+        white-space: nowrap; /* 1 línea; quítalo para multilinea */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+      }
 
       /* Texto inferior */
       .bottom {
@@ -318,19 +266,69 @@
             0 0 26px rgba(255, 255, 255, 0.25);
         }
       }
+      #tap-layer {
+        position: fixed;
+        inset: 0;
+        background: transparent;
+        border: 0;
+        z-index: 20000; /* 👈 por encima de badge/title/ruleta */
+        pointer-events: auto; /* 👈 recibe clic antes del giro */
+      }
+
+      /* Overlay del premio */
+      #prize-overlay {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9000;
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(6px);
+        pointer-events: none;
+      }
+
+      /* Confeti POR ENCIMA DEL overlay */
+      #confetti {
+        position: fixed;
+        inset: 0;
+        z-index: 9999; /* ✅ arriba del overlay */
+        pointer-events: none;
+      }
+
+      /* Imagen del premio MÁS ARRIBA QUE EL CONFETI */
+      #prize-img {
+        position: relative;
+        z-index: 10000; /* ✅ para que no quede cubierto por confeti */
+        max-width: 70vw;
+        max-height: 70vh;
+        object-fit: contain;
+      }
+
+      #prize-label {
+        font-family: "AntonLocal", system-ui, Arial, sans-serif; /* o la tuya */
+        font-size: clamp(22px, 4.2vmin, 36px);
+        font-weight: 800;
+        letter-spacing: 0.4px;
+      }
     </style>
   </head>
   <body>
     <div id="app">
       <!-- Textos superiores -->
       <div class="top">
-        <div class="badge" id="badge-text" style="opacity: 0;">¡SUERTE!</div>
-        <h1 class="title" id="title-text" style="opacity: 0;">RULETA DE REGALOS</h1>
+        <div class="badge" id="badge-text" style="opacity: 0">¡SUERTE!</div>
+        <h1 class="title" id="title-text" style="opacity: 0">
+          RULETA DE REGALOS
+        </h1>
       </div>
 
-        <div class="badge">¡SUERTE!</div>
-        <h1 class="title">RULETA DE <br> REGALOS</h1>
-      
+      <div class="badge">¡SUERTE!</div>
+      <h1 class="title">
+        RULETA DE <br />
+        REGALOS
+      </h1>
+
       <!-- Ruleta -->
       <div class="stage">
         <div class="pointer"></div>
@@ -351,6 +349,13 @@
       <!-- Efectos/interacción -->
       <canvas id="confetti"></canvas>
       <button id="tap-layer" aria-label="Tocar para girar"></button>
+      <!-- Overlay de premio -->
+      <div id="prize-overlay" aria-live="polite" style="display: none">
+        <div class="prize-card">
+          <img id="prize-img" alt="Premio" />
+          <div id="prize-label" style="opacity: 0">¡Ganaste!</div>
+        </div>
+      </div>
     </div>
 
     <script>
@@ -369,6 +374,20 @@
           "images/slot09.png",
           "images/slot10.png",
         ];
+        // Texto que se mostrará en el overlay por cada slot (ajústalo a tu gusto)
+        const PRIZE_LABELS = [
+          "Sigue Intentando",
+          "Hola",
+          "Hola",
+          "Hola",
+          "Hola",
+          "Hola",
+          "Hola",
+          "Hola",
+          "Hola",
+          "Hola",
+        ];
+
         const REDIRECT_URL = "index.html"; // <- cambia si tu archivo se llama distinto
 
         const TOP_TEXT = "¡Gira la ruleta y gana!";
@@ -386,6 +405,32 @@
         document.getElementById("badge-text").textContent = BADGE_TEXT;
         document.getElementById("bottom-text").textContent = BOTTOM_TEXT;
         const tapLayer = document.getElementById("tap-layer");
+
+        const overlay = document.getElementById("prize-overlay");
+        const prizeImg = document.getElementById("prize-img");
+        const prizeText = document.getElementById("prize-label");
+
+        function showPrizeOverlay(index) {
+          // Imagen del premio
+          prizeImg.src = SLOTS[index]; // usa tu imagen del slot
+          // Texto del premio
+          prizeText.textContent = PRIZE_LABELS[index] || `Premio ${index + 1}`;
+
+          // Mostrar
+          overlay.style.display = "flex";
+
+          // pequeña animación de entrada (JS, sin CSS)
+          overlay.style.opacity = "0";
+          overlay.style.transition = "opacity .25s ease";
+          requestAnimationFrame(() => (overlay.style.opacity = "1"));
+        }
+
+        function hidePrizeOverlay() {
+          overlay.style.opacity = "0";
+          setTimeout(() => {
+            overlay.style.display = "none";
+          }, 250);
+        }
 
         // DPR
         const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
@@ -590,6 +635,8 @@
 
         // ---- Giro con tap ----
         let spinning = false;
+        // Bloqueo después del primer premio
+        let hasSpun = false;
         let currentDeg = 0;
 
         const sliceDeg = 360 / PARTS; // PARTS = 10
@@ -622,47 +669,64 @@
           return weights.length - 1;
         }
 
-
-
-
-
-        
         function spin() {
-          if (spinning) return;
+          // si ya está girando o ya se usó una vez, no hacer nada
+          if (spinning || hasSpun) return;
+
+          const tap = document.getElementById("tap-layer");
+          if (tap) tap.style.pointerEvents = "none"; // ❌ no más taps
+
           spinning = true;
+          hasSpun = true; // 🔒 bloquea siguientes giros
           document.getElementById("bottom-text").textContent = "Girando…";
 
-          // Elige ganador (ponderado o uniforme)
+          // ganador (ponderado o uniforme)
           const winner = pickWeighted
             ? pickWeighted(WEIGHTS)
             : Math.floor(Math.random() * PARTS);
 
-          // Ángulo absoluto para centrar ese slot
-          const targetAbs = angleForSlotCenter(winner); // e.g., -18°, -54°, etc.
+          // guarda el ganador
+          window.__lastWinner = winner;
 
-          // Calcula cuánto rotar desde la posición actual + vueltas extra (para el efecto)
+          // calcula el objetivo centrado
+          const sliceDeg = 360 / PARTS;
+          const targetAbs = -(winner + 0.5) * sliceDeg; // centro del slot en la punta
           const extraTurns = 5 + Math.floor(Math.random() * 4); // 5–8 vueltas
           const targetAbsNorm = ((targetAbs % 360) + 360) % 360;
-          const delta = deltaTo(currentDeg, targetAbsNorm);
-          const target = currentDeg + extraTurns * 360 + delta;
 
-          // Aplica la rotación y fija el estado final absoluto
+          let d = (targetAbsNorm - currentDeg) % 360;
+          if (d < 0) d += 360;
+
+          const target = currentDeg + extraTurns * 360 + d;
+
+          // aplica rotación
           wheel.style.setProperty("--deg", target + "deg");
           currentDeg = targetAbsNorm;
-
-          // Guarda el ganador por si lo quieres usar (toast, premio, etc.)
-          window.__lastWinner = winner;
         }
 
+        
         wheel.addEventListener("transitionend", () => {
-          spinning = false;
-          document.getElementById("bottom-text").textContent =
-            "Toca para girar de nuevo";
+  spinning = false;
 
-          redirectPending = true; // <- marcamos que, al acabar confeti, se redirige
-          releaseConfetti(); // lanza confeti
-        });
+  const winner = window.__lastWinner ?? 0;
 
+  // Mostrar overlay con la imagen del premio
+  showPrizeOverlay(winner);
+
+  // Confeti visible (tu canvas ya está con z-index por encima)
+  releaseConfetti();
+
+  // A los 5s: ocultar overlay y redirigir
+  setTimeout(() => {
+    hidePrizeOverlay();
+    window.location.href = REDIRECT_URL; // "index.html"
+  }, 5000);
+});
+
+
+
+
+      
         tapLayer.addEventListener("click", spin, { passive: true });
         tapLayer.addEventListener(
           "touchstart",

@@ -170,3 +170,16 @@ body.trivia-play .bg{
 }
 
 
+
+
+
+
+
+.btn_back {
+  position: absolute;
+  width: 120px;
+  top: 50px;
+  left: 90px;
+  cursor: pointer;
+  z-index: 1000;
+}

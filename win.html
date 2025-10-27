@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>¡Ganaste!</title>
+<style>
+  :root{
+    --stripe:#352e70;
+    --bg:url("images/fondoruleta.png"); /* cambia el fondo si quieres */
+  }
+
+  html,body{height:100%;margin:0}
+  body{
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    color:#fff;
+    background:#000 var(--bg) no-repeat center/cover fixed;
+    display:grid; place-items:center;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  /* Canvas de confeti */
+  #confetti{
+    position: fixed;
+    inset: 0;
+    width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Capa para contraste de texto */
+  .overlay{
+    position:fixed; inset:0;
+    background:linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.45));
+    z-index: 0;
+    opacity: 0;
+    animation: fadeIn .8s ease forwards;
+  }
+
+  .panel{
+    position:relative; z-index:1; text-align:center; max-width:900px; padding:24px;
+    opacity: 0; transform: translateY(12px) scale(.98);
+    animation: popIn .7s cubic-bezier(.2,.7,.2,1) .15s forwards;
+  }
+
+  h1{
+    margin:0 0 10px;
+    font-size:clamp(62px, 7vw, 72px);
+    font-weight:900;
+    letter-spacing:.5px;
+    transform-origin: center;
+    animation: heartbeat 1.2s ease-in-out .6s infinite;
+  }
+
+  p{
+    margin:0;
+    font-size:clamp(16px, 3.5vw, 22px);
+    opacity:.0;
+    animation: fadeIn .6s ease .4s forwards;
+  }
+
+  .count{ font-weight:800; }
+
+  /* ============ Animations ============ */
+  @keyframes fadeIn{
+    from{opacity:0}
+    to{opacity:1}
+  }
+  @keyframes popIn{
+    0%{opacity:0; transform: translateY(12px) scale(.98)}
+    100%{opacity:1; transform: translateY(0) scale(1)}
+  }
+  @keyframes heartbeat{
+    0%{ transform: scale(1) }
+    25%{ transform: scale(1.06) }
+    40%{ transform: scale(1) }
+    60%{ transform: scale(1.08) }
+    100%{ transform: scale(1) }
+  }
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+<div class="overlay" aria-hidden="true"></div>
+
+<main class="panel" role="main" aria-labelledby="title" aria-describedby="desc">
+  <h1 id="title">¡Ganaste!</h1>
+  <p id="desc">Memoria afilada. ¡Excelente trabajo! Volviendo en <span class="count" id="count">5</span>…<br/>Toca cualquier parte para ir ahora.</p>
+</main>
+
+<script>
+(function(){
+  /* ========= Config ========= */
+  const SECS = 5;
+  const REDIRECT = 'index.html';
+
+  /* ========= Countdown + tap-to-go ========= */
+  const countEl = document.getElementById('count');
+  let ended = false;
+
+  function go(){ location.href = REDIRECT; }
+  function safeGo(){
+    if (ended) return;
+    ended = true;
+    go();
+  }
+
+  let left = SECS;
+  countEl.textContent = left;
+  const t = setInterval(() => {
+    left--;
+    countEl.textContent = left;
+    if (left <= 0){ clearInterval(t); safeGo(); }
+  }, 1000);
+
+  const opts = { capture:false, once:true, passive:true };
+  document.addEventListener('click',  safeGo, opts);
+  document.addEventListener('touchstart', safeGo, opts);
+  document.addEventListener('keydown', () => safeGo(), { once:true });
+  setTimeout(safeGo, (SECS) * 1000); // failsafe
+
+  /* ========= Confetti (sin librerías) ========= */
+  const canvas = document.getElementById('confetti');
+  const ctx = canvas.getContext('2d');
+  let W, H, rafId, running = true;
+
+  function resize(){
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize, { passive:true });
+  resize();
+
+  const colors = [
+    '#ffd166', '#06d6a0', '#118ab2', '#ef476f', '#ffffff', 'var(--stripe)'
+  ];
+
+  function rand(n){ return Math.random()*n; }
+  function rrange(a,b){ return a + Math.random()*(b-a); }
+
+  const N = Math.min(220, Math.floor((W*H)/18000)); // escala por pantalla
+  const parts = Array.from({length: N}, () => spawn());
+
+  function spawn(){
+    const angle = rrange(-Math.PI, 0); // hacia abajo
+    const speed = rrange(2, 6);
+    const size = rrange(6, 14);
+    const shape = Math.random() < 0.5 ? 'rect' : 'circle';
+    return {
+      x: rrange(0, W),
+      y: rrange(-H*0.25, -20),
+      vx: Math.cos(angle)*speed + rrange(-1,1),
+      vy: Math.sin(angle)*speed + rrange(0,1),
+      g: rrange(0.03, 0.08),
+      w: size, h: rrange(6, 18),
+      r: rrange(0, Math.PI*2),
+      rv: rrange(-0.1, 0.1),
+      c: colors[Math.floor(rand(colors.length))],
+      s: shape,
+      life: rrange(2.2, 3.4) // en segundos efectivos
+    };
+  }
+
+  let last = performance.now();
+  function tick(now){
+    const dt = Math.min(0.033, (now - last) / 1000); // s
+    last = now;
+
+    ctx.clearRect(0,0,W,H);
+
+    parts.forEach(p => {
+      // física
+      p.vy += p.g;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.r += p.rv;
+      p.life -= dt;
+
+      // wrap lateral suave
+      if (p.x < -20) p.x = W + 20;
+      if (p.x > W + 20) p.x = -20;
+
+      // respawn si sale por abajo o se agota
+      if (p.y > H + 40 || p.life <= 0){
+        Object.assign(p, spawn(), { x: rrange(0, W), y: -20 });
+      }
+
+      // render
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.r);
+      ctx.fillStyle = p.c;
+      if (p.s === 'rect'){
+        ctx.fillRect(-p.w*0.5, -p.h*0.5, p.w, p.h);
+      } else {
+        ctx.beginPath();
+        ctx.arc(0,0, p.w*0.6, 0, Math.PI*2);
+        ctx.fill();
+      }
+      ctx.restore();
+    });
+
+    if (running) rafId = requestAnimationFrame(tick);
+  }
+  rafId = requestAnimationFrame(tick);
+
+  // deja de emitir después de 3.5s (pero lo que queda cae)
+  setTimeout(() => { running = false; cancelAnimationFrame(rafId); }, 5000);
+
+})();
+</script>
+</body>
+</html>

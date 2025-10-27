@@ -2,234 +2,233 @@
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Memoria 3x4 (Básico)</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Memoria 3x4</title>
+
     <style>
-  /* =========================
-   * Variables (colores / espacios)
+      /* =========================
+   * Variables
    * ========================= */
-  :root{
-    --stripe: #352e70;   /* color de la franja/división y timer */
-    --gap: 10px;         /* separación entre cartas */
-  }
+      :root {
+        --stripe: #352e70;
+        --gap: 10px;
+      }
 
-  /* =========================
-   * Fondo / tipografía base
+      /* =========================
+   * Base
    * ========================= */
-  html, body{
-    height: 100%;
-    margin: 0;
-  }
-  body{
-    
-  overflow-y: hidden;
-  overflow-x: hidden;
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-    background: #000 url("images/fondomemoria.png") no-repeat center center fixed;
-    background-size: cover;
-    color: #fff;
-  }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      body {
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+        background: #000 url("images/fondomemoria.png") no-repeat center center
+          fixed;
+        background-size: cover;
+        color: #fff;
+        overflow: hidden;
+      }
 
-  /* =========================
-   * Contenedor principal
+      .app {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 12px;
+        position: relative;
+      }
+
+      /* =========================
+   * Topbar (logo/título/timer)
    * ========================= */
-  .app{
-    max-width: 980px;
-    margin: 0 auto;
-    padding: 12px;
-  }
+      .topbar {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 8px 0;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .brand img {
+        width: 300px;
+        height: 300px;
+        object-fit: contain;
+        margin-left: 650px;
+        margin-top: -70px;
+      }
+      .brand .title {
+        position: absolute;
+        left: 50%;
+        top: 80%;
+        transform: translate(-50%, -50%);
+        margin: 0;
+        font-size: clamp(20px, 6vw, 50px);
+        font-weight: 900;
+        color: var(--stripe);
+        white-space: nowrap;
+        pointer-events: none;
+        z-index: 1;
+      }
 
-  /* =========================
-   * Timer (contenedor movible)
-   * =========================
-   * - Puedes ajustar top/left para colocarlo donde quieras.
-   * - Fondo morado (—stripe) y texto blanco.
-   */
-  .timer{
-    position: absolute;
-    top: 50px;            /* mueve libre */
-    left: 60px;           /* mueve libre */
-    z-index: 10;
+      /* Timer movible */
+      .timer {
+        position: absolute;
+        top: 50px;
+        left: 60px;
+        z-index: 10;
+        background: var(--stripe);
+        color: #fff;
+        font-weight: 700;
+        font-size: 60px;
+        padding: 10px 36px;
+        border: none;
+        border-radius: 32px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+      }
 
-    background: var(--stripe);
-    color: #fff;
-    font-weight: 700;
-    font-size: 60px;
-
-    padding: 10px 36px;
-    border: none;
-    border-radius: 32px;
-    box-shadow: 0 4px 14px rgba(0,0,0,.25); /* opcional */
-  }
-
-  /* =========================
-   * Cabecera / Branding
-   * =========================
-   * - .topbar relativo para centrar el título por absoluto.
-   * - El logo actualmente se posiciona con márgenes (hack visual).
-   */
-  .topbar{
-    position: relative; /* referencia para .brand .title */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 8px 0;
-  }
-  .brand{
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .brand img{
-    margin-left: 650px;   /* posicionamiento manual del logo */
-    margin-top: -70px;    /* (si lo prefieres, luego lo cambiamos a absolute) */
-    width: 300px;
-    height: 300px;
-    object-fit: contain;
-  }
-  .brand .title{
-    position: absolute;   /* relativo a .topbar */
-    left: 50%;
-    top: 80%;
-    transform: translate(-50%, -50%);
-    margin: 0;
-    font-size: clamp(20px, 6vw, 50px);
-    font-weight: 900;
-    color: var(--stripe);
-    white-space: nowrap;
-    pointer-events: none; /* no tapa botones ni cronómetro */
-    z-index: 1;
-  }
-  .right{
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  /* =========================
-   * Botones
+      /* =========================
+   * Botón genérico
    * ========================= */
-  button{
-    cursor: pointer;
-    border: 1px solid #ffffff40;
-    background: #ffffff20;
-    color: #fff;
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-weight: 600;
-  }
+      button {
+        cursor: pointer;
+        border: 1px solid #ffffff40;
+        background: #ffffff20;
+        color: #fff;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-weight: 600;
+      }
 
-  /* =========================
-   * Tablero (marco con franja)
-   * =========================
-   * - El background del .board se ve a través del gap del grid.
-   */
-  .board{
-    margin-top: 10px;
-    margin-left: 45px;
-    width: 860px;
-    background: var(--stripe);
-    padding: var(--gap);
-  }
-
-  /* =========================
-   * Grid 3×4 (3 columnas, 4 filas)
+      /* =========================
+   * Tablero (marco / franja visible)
    * ========================= */
-  .grid{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--gap); /* la franja visible */
-  }
+      .board {
+        margin: 10px auto;
+        width: min(860px, calc(100vw - 40px));
+        background: var(--stripe);
+        padding: var(--gap);
+      }
 
-  /* =========================
-   * Carta (botón “limpio” con proporción 3:4)
-   * =========================
-   * - Sin bordes propios para que se vea solo la franja del grid.
-   * - overflow:hidden + border-radius aplican a las caras.
-   */
-  .card{
-    position: relative;
-    aspect-ratio: 3 / 4;
-    overflow: hidden;
-    cursor: pointer;
-    display: grid;
-    place-items: center;
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--gap);
+      }
 
-    /* botón “limpio” (quita estilos por defecto) */
-    border: 0;
-    padding: 0;
-    background: transparent;
-    outline: none;
-  }
-  .card:focus-visible{
-    outline: 2px solid #ffffff80;
-    outline-offset: 2px;
-  }
+      /* Bloqueo temporal mientras comparamos */
+      .grid.is-evaluating .card {
+        pointer-events: none;
+      }
 
-  /* =========================
-   * Flip 3D con wrapper interno
-   * =========================
-   * - IMPORTANTE: el HTML/JS debe construir:
-   *     .card > .card-inner > (.back, .front)
-   * - No uses display:none en .front/.back; se controla con rotaciones.
-   */
-  .card{
-    perspective: 1000px; /* la perspectiva va en el padre */
-    border-radius: inherit;
-  }
-  .card-inner{
-    position: absolute; inset: 0;
-    transform-style: preserve-3d;
-    transition: transform .6s cubic-bezier(.2,.7,.2,1);
-    will-change: transform;
-  }
-  /* Al voltear (tu JS agrega .revealed), gira el wrapper */
-  .card.revealed .card-inner{
-    transform: rotateY(180deg);
-  }
-
-  /* Caras: ocupan todo y ocultan su reverso */
-  .card .front,
-  .card .back{
-    position: absolute; inset: 0;
-    display: grid; place-items: center;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    border-radius: inherit;
-    background: transparent;
-    transform: translateZ(0); /* evita líneas finas por sub-píxeles */
-  }
-  /* Orientación: por defecto se ve el dorso; frente “dado vuelta” */
-  .card .back{  transform: rotateY(0deg); }
-  .card .front{ transform: rotateY(180deg); }
-
-  /* Imágenes llenan cada cara (cambia a contain en .front si lo prefieres) */
-  .card .back img,
-  .card .front img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;  /* frente a 'contain' si necesitas ver todo el gráfico */
-    display: block;
-    border-radius: inherit;
-    pointer-events: none;
-    user-select: none;
-  }
-
-  /* =========================
-   * Estados de la carta
+      /* =========================
+   * Carta + flip 3D
    * ========================= */
-  .card.matched{ cursor: default; } /* deshabilitada visualmente */
-  .card.disabled{ pointer-events: none; }
+      .card {
+        position: relative;
+        aspect-ratio: 3/4;
+        overflow: hidden;
+        display: grid;
+        place-items: center;
+        border: 0;
+        padding: 0;
+        background: transparent;
+        outline: none;
+        perspective: 1000px;
+        border-radius: 12px;
+      }
+      .card:focus-visible {
+        outline: 2px solid #ffffff80;
+        outline-offset: 2px;
+      }
 
-  /* =========================
-   * Responsive (mobile)
+      .card-inner {
+        position: absolute;
+        inset: 0;
+        transform-style: preserve-3d;
+        transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+        will-change: transform;
+        transform: translateZ(0);
+      }
+      .card.revealed .card-inner {
+        transform: rotateY(180deg);
+      }
+
+      .card .front,
+      .card .back {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        border-radius: inherit;
+        transform: translateZ(0);
+        background: transparent;
+      }
+      .card .back {
+        transform: rotateY(0deg);
+      }
+      .card .front {
+        transform: rotateY(180deg);
+      }
+
+      .card .front img,
+      .card .back img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        border-radius: inherit;
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .card.matched {
+        cursor: default;
+      }
+      .card.disabled {
+        pointer-events: none;
+      }
+
+      /* =========================
+   * Overlay de inicio
    * ========================= */
-  @media (max-width: 520px){
-    .brand .title{ font-size: 16px; }
-  }
-</style>
+      .start-overlay {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+      }
+      .start-btn {
+        border: none;
+        background: transparent;
+        padding: 0;
+        cursor: pointer;
+      }
+      .start-btn img {
+        width: min(50vw, 500px);
+        height: auto;
+        display: block;
+      }
 
+      /* =========================
+   * Responsive
+   * ========================= */
+      @media (max-width: 520px) {
+        .brand .title {
+          font-size: 16px;
+        }
+      }
+    </style>
   </head>
   <body>
     <div class="app">
@@ -240,291 +239,308 @@
           <h1 class="title">Despierta tu memoria con ROCA</h1>
         </div>
         <div class="right">
-          <div class="timer" id="timer">00:00</div>
-          <button id="resetBtn" style="opacity: 0;">Reiniciar</button>
+          <div class="timer" id="timer">45 Seg</div>
+          <button id="resetBtn" style="opacity: 0">Reiniciar</button>
         </div>
       </header>
 
-<audio id="winSnd" src="sounds/win.mp3" preload="auto"></audio>
-      <!-- Tablero con franja -->
+      <!-- Overlay de inicio (botón imagen centrado) -->
+      <div id="startOverlay" class="start-overlay">
+        <button id="startBtn" class="start-btn" aria-label="Comenzar">
+          <img src="images/btonjugar.png" alt="Comenzar" />
+        </button>
+      </div>
+
+      <!-- Tablero -->
       <main class="board">
         <div id="grid" class="grid" aria-label="Tablero memoria 3 por 4"></div>
       </main>
     </div>
 
-<audio id="winSnd" src="sounds/win.mp3" preload="auto"></audio>
+    <!-- Audio (una sola vez) -->
+    <audio id="winSnd" src="sounds/win.mp3" preload="auto"></audio>
 
-<script>
-(() => {
-  // =========================
-  //  Configuración del juego
-  // =========================
+    <script>
+      (() => {
+        // =========================
+        // Config
+        // =========================
+        const PAIRS = [
+          "images/1.png",
+          "images/2.png",
+          "images/3.png",
+          "images/4.png",
+          "images/5.png",
+          "images/6.png",
+        ];
+        const CARD_BACK = "images/back.png";
+        const START_SECONDS = 45;
+        const REDIRECT_URL = "index.html";
 
-  // 6 imágenes (parejas) en /images
-  const PAIRS = [
-    "images/1.png",
-    "images/2.png",
-    "images/3.png",
-    "images/4.png",
-    "images/5.png",
-    "images/6.png",
-  ];
+        // =========================
+        // DOM
+        // =========================
+        const grid = document.getElementById("grid");
+        const timerEl = document.getElementById("timer");
+        const resetBtn = document.getElementById("resetBtn");
+        const startOverlay = document.getElementById("startOverlay");
+        const startBtn = document.getElementById("startBtn");
+        const winEl = document.getElementById("winSnd");
 
-  // Tu logo de dorso:
-  const CARD_BACK = "images/back.png"; // <-- pon aquí tu archivo
+        const WIN_URL = "win.html";
+        const LOSE_URL = "lose.html";
 
-  // Duración inicial del temporizador (segundos) — cuenta regresiva
-  const START_SECONDS = 45; // <<< 45 s
-
-  // URL a donde redirigir al finalizar
-  const REDIRECT_URL = "index.html";
-
-  // =========================
-  //  Referencias del DOM
-  // =========================
-  const grid = document.getElementById("grid");
-  const timerEl = document.getElementById("timer");
-  const resetBtn = document.getElementById("resetBtn");
-
-  // =========================
-  //  Estado del juego
-  // =========================
-  const TOTAL_PAIRS = 6;
-  const TOTAL_CARDS = 12; // 3x4
-
-  let deck = [];
-  let first = null;
-  let second = null;
-  let lock = false;
-  let matches = 0;
-
-  // =========================
-  //  Estado del temporizador
-  // =========================
-  let started = false;
-  let remaining = START_SECONDS;
-  let tickId = null;
-
-  // =========================
-  //  Utilidades
-  // =========================
-
-
-// ===== Sonido de acierto =====
-const winEl = document.getElementById("winSnd"); // si usas <audio>
-const WIN_SRC = winEl ? winEl.currentSrc || winEl.src : "sounds/win.mp3";
-
-// Reproduce el sonido. Si el audio está en uso, clona para evitar cortes.
-function playWin(){
-  try{
-    const a = winEl ? winEl.cloneNode(true) : new Audio(WIN_SRC);
-    a.currentTime = 0;
-    a.volume = 1.0; // ajusta si quieres
-    const p = a.play();
-    if (p && typeof p.catch === "function") p.catch(()=>{ /* silencio si el navegador bloquea */ });
-  }catch(e){ /* no romper el juego por audio */ }
-}
-
-  
-  function shuffle(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }
-
-  function paintTimer() {
-    // 'remaining' ya es entero en segundos
-    timerEl.textContent = `${remaining} Seg`;
-  }
-
-  // Navegación centralizada (pequeño delay para no pelear con alert)
-  function goHome(delay = 150) {
-    setTimeout(() => {
-      window.location.href = REDIRECT_URL;
-    }, delay);
-  }
-
-  // =========================
-  //  Temporizador regresivo
-  // =========================
-  function startCountdown() {
-    if (started) return;
-    started = true;
-
-    const tStart = performance.now();
-    const target = tStart + remaining * 1000;
-
-    // Actualiza ~10 veces por segundo
-    tickId = setInterval(() => {
-      const now = performance.now();
-      const leftMs = Math.max(0, Math.round(target - now));
-      remaining = Math.ceil(leftMs / 1000);
-      paintTimer();
-
-      if (leftMs <= 0) {
-        timeUp();
-      }
-    }, 100);
-  }
-
-  function stopCountdown() {
-    clearInterval(tickId);
-    tickId = null;
-  }
-
-  function resetCountdown() {
-    stopCountdown();
-    started = false;
-    remaining = START_SECONDS;
-    paintTimer();
-  }
-
-  function timeUp() {
-    stopCountdown();
-    // Bloquea el juego: deshabilita todas las cartas que no hicieron match
-    document.querySelectorAll(".card:not(.matched)").forEach((el) => {
-      el.setAttribute("disabled", "true");
-    });
-    goHome(); // <<< Redirige al index
-  }
-
-  // =========================
-  //  Construcción del mazo
-  // =========================
-  function buildDeck() {
-    const base = [];
-    PAIRS.slice(0, TOTAL_PAIRS).forEach((src, key) => {
-      base.push({ id: `${key}-A`, key, img: src, matched: false });
-      base.push({ id: `${key}-B`, key, img: src, matched: false });
-    });
-    return shuffle(base);
-  }
-
-  function createCardEl(card) {
-    const el = document.createElement("button");
-    el.type = "button";
-    el.className = "card";
-    el.dataset.key = card.key;
-    el.dataset.id = card.id;
-    el.setAttribute("aria-label", "Carta de memoria");
-
-    // Wrapper que rota en 3D
-    const inner = document.createElement("div");
-    inner.className = "card-inner";
-
-    const back = document.createElement("div");
-    back.className = "back";
-    const bi = document.createElement("img");
-    bi.src = CARD_BACK;
-    bi.alt = "Dorso";
-    back.appendChild(bi);
-
-    const front = document.createElement("div");
-    front.className = "front";
-    const fi = document.createElement("img");
-    fi.src = card.img;
-    fi.alt = "Imagen";
-    front.appendChild(fi);
-
-    inner.appendChild(back);
-    inner.appendChild(front);
-    el.appendChild(inner);
-
-    el.addEventListener("click", () => onClickCard(el));
-    return el;
-  }
-
-  function render() {
-    grid.innerHTML = "";
-    deck.forEach((card) => grid.appendChild(createCardEl(card)));
-  }
-
-  // =========================
-  //  Lógica de clic en carta
-  // =========================
-  function onClickCard(el) {
-    if (lock) return;
-    if (el.classList.contains("revealed") || el.classList.contains("matched"))
-      return;
-
-    el.classList.add("revealed");
-
-    if (!first) {
-      first = el;
-      return;
-    }
-    if (first === el) return;
-
-    second = el;
-    lock = true;
-
-    const k1 = first.dataset.key;
-    const k2 = second.dataset.key;
-
-    if (k1 === k2) {
-      // MATCH: mantenerlas descubiertas
-      setTimeout(() => {
-        first.classList.add("matched"); // quedan descubiertas
-        second.classList.add("matched"); // quedan descubiertas
-        // NO quitamos 'revealed' para que sigan abiertas
-        first.setAttribute("disabled", "true");
-        second.setAttribute("disabled", "true");
-
-
-    playWin();
-
-        first = null;
-        second = null;
-        lock = false;
-        matches++;
-
-        if (matches === TOTAL_PAIRS) {
-          stopCountdown();
-          goHome(); // <<< Redirige al index al ganar
+        function go(url, delay = 150) {
+          setTimeout(() => {
+            location.href = url;
+          }, delay);
         }
-      }, 200);
-    } else {
-      // NO MATCH: se tapan de nuevo
-      setTimeout(() => {
-        first.classList.remove("revealed");
-        second.classList.remove("revealed");
-        first = null;
-        second = null;
-        lock = false;
-      }, 600);
-    }
-  }
 
-  // =========================
-  //  Reset general
-  // =========================
-  function reset() {
-    stopCountdown();
-    resetCountdown(); // vuelve a 45 s y pinta
-    matches = 0;
-    first = null;
-    second = null;
-    lock = false;
-    deck = buildDeck();
-    render();
-    // Arranca automáticamente de nuevo al reiniciar:
-    startCountdown();
-  }
+        // =========================
+        // Estado
+        // =========================
+        const TOTAL_PAIRS = 6;
+        let deck = [];
+        let first = null,
+          second = null;
+        let lock = false;
+        let matches = 0;
 
-  // =========================
-  //  Inicio (auto-start)
-  // =========================
-  deck = buildDeck();
-  render();
-  resetCountdown(); // prepara 45 s y pinta
-  startCountdown(); // <<< arranca automáticamente
+        let started = false;
+        let remaining = START_SECONDS;
+        let tickId = null;
 
-  resetBtn.addEventListener("click", reset);
-})();
-</script>
+        // =========================
+        // Helpers
+        // =========================
+        function shuffle(arr) {
+          for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+          }
+          return arr;
+        }
+        function paintTimer() {
+          timerEl.textContent = `${remaining} Seg`;
+        }
+        function goHome(delay = 150) {
+          setTimeout(() => {
+            location.href = REDIRECT_URL;
+          }, delay);
+        }
+        function playWin() {
+          try {
+            const a = winEl
+              ? winEl.cloneNode(true)
+              : new Audio("sounds/win.mp3");
+            a.currentTime = 0;
+            a.volume = 1;
+            a.play()?.catch(() => {});
+          } catch (e) {}
+        }
+        function preloadImages(urls = [], done = () => {}) {
+          let doneCount = 0;
+          const total = urls.length;
+          if (!total) return done();
+          urls.forEach((src) => {
+            const im = new Image();
+            im.onload = im.onerror = () => {
+              if (++doneCount === total) done();
+            };
+            im.src = src;
+          });
+        }
 
+        // =========================
+        // Timer
+        // =========================
+        function startCountdown() {
+          if (started) return;
+          started = true;
+          const tStart = performance.now();
+          const target = tStart + remaining * 1000;
 
+          tickId = setInterval(() => {
+            const now = performance.now();
+            const leftMs = Math.max(0, Math.round(target - now));
+            remaining = Math.ceil(leftMs / 1000);
+            paintTimer();
+            if (leftMs <= 0) timeUp();
+          }, 100);
+        }
+        function stopCountdown() {
+          clearInterval(tickId);
+          tickId = null;
+        }
+        function resetCountdown() {
+          stopCountdown();
+          started = false;
+          remaining = START_SECONDS;
+          paintTimer();
+        }
+        function timeUp() {
+          stopCountdown();
+          document
+            .querySelectorAll(".card:not(.matched)")
+            .forEach((el) => el.setAttribute("disabled", "true"));
+          go(LOSE_URL); // <<<<<<<<<< redirige a lose.html
+        }
+
+        // =========================
+        // Deck + Render
+        // =========================
+        function buildDeck() {
+          const base = [];
+          PAIRS.slice(0, TOTAL_PAIRS).forEach((src, key) => {
+            base.push({ id: `${key}-A`, key, img: src });
+            base.push({ id: `${key}-B`, key, img: src });
+          });
+          return shuffle(base);
+        }
+
+        function createCardEl(card) {
+          const el = document.createElement("button");
+          el.type = "button";
+          el.className = "card";
+          el.dataset.key = card.key;
+          el.dataset.id = card.id;
+          el.setAttribute("aria-label", "Carta de memoria");
+
+          const inner = document.createElement("div");
+          inner.className = "card-inner";
+
+          const back = document.createElement("div");
+          back.className = "back";
+          const bi = document.createElement("img");
+          bi.src = CARD_BACK;
+          bi.alt = "Dorso";
+          back.appendChild(bi);
+
+          const front = document.createElement("div");
+          front.className = "front";
+          const fi = document.createElement("img");
+          fi.src = card.img;
+          fi.alt = "Imagen";
+          front.appendChild(fi);
+
+          inner.appendChild(back);
+          inner.appendChild(front);
+          el.appendChild(inner);
+
+          el.addEventListener("click", () => onClickCard(el));
+          return el;
+        }
+
+        function render() {
+          grid.innerHTML = "";
+          deck.forEach((card) => grid.appendChild(createCardEl(card)));
+        }
+
+        // =========================
+        // Interacción
+        // =========================
+        function onClickCard(el) {
+          if (lock) return;
+          if (
+            el.classList.contains("revealed") ||
+            el.classList.contains("matched")
+          )
+            return;
+
+          el.classList.add("revealed");
+
+          if (!first) {
+            first = el;
+            return;
+          }
+          if (first === el) return;
+
+          second = el;
+          lock = true;
+          grid.classList.add("is-evaluating");
+
+          const k1 = first.dataset.key;
+          const k2 = second.dataset.key;
+
+          if (k1 === k2) {
+            setTimeout(() => {
+              first.classList.add("matched");
+              second.classList.add("matched");
+              first.setAttribute("disabled", "true");
+              second.setAttribute("disabled", "true");
+
+              playWin();
+
+              first = null;
+              second = null;
+              lock = false;
+              matches++;
+              grid.classList.remove("is-evaluating");
+
+              if (matches === TOTAL_PAIRS) {
+                stopCountdown();
+                go(WIN_URL); // <<<<<<<<<< redirige a win.html
+              }
+            }, 200);
+          } else {
+            setTimeout(() => {
+              first.classList.remove("revealed");
+              second.classList.remove("revealed");
+              first = null;
+              second = null;
+              lock = false;
+              grid.classList.remove("is-evaluating");
+            }, 600);
+          }
+        }
+
+        function reset() {
+          stopCountdown();
+          resetCountdown();
+          matches = 0;
+          first = null;
+          second = null;
+          lock = false;
+          deck = buildDeck();
+          render();
+          // Se arranca con el botón, no aquí
+        }
+
+        // =========================
+        // Vista previa (3s) y arranque
+        // =========================
+        let introDone = false;
+        function previewAndStart() {
+          if (introDone) return;
+          introDone = true;
+
+          const cards = Array.from(document.querySelectorAll(".card"));
+          grid.classList.add("is-evaluating");
+          cards.forEach((c) => c.classList.add("revealed"));
+
+          startOverlay.style.display = "none";
+
+          setTimeout(() => {
+            cards.forEach((c) => c.classList.remove("revealed"));
+            grid.classList.remove("is-evaluating");
+            startOverlay.style.display = "none";
+            resetCountdown();
+            startCountdown();
+          }, 3000);
+        }
+
+        // =========================
+        // Init
+        // =========================
+        deck = buildDeck();
+        preloadImages([CARD_BACK, ...PAIRS], () => {
+          render();
+          resetCountdown(); // muestra "45 Seg"
+        });
+
+        startBtn?.addEventListener("click", previewAndStart);
+        resetBtn?.addEventListener("click", reset);
+      })();
+    </script>
   </body>
 </html>

@@ -22,7 +22,7 @@
 
       <!-- Avance -->
       <div>
-        <strong id="progress" style="opacity: 0"></strong>
+        <strong id="progress"></strong>
       </div>
 
       <!-- Pregunta -->
@@ -35,6 +35,13 @@
       <audio id="sndWin" src="./sounds/win.mp3" preload="auto"></audio>
       <audio id="sndLose" src="./sounds/lose.mp3" preload="auto"></audio>
     </main>
+
+    <div class="btnback" onclick="window.location.href='trivia.html'">
+      <img 
+      class="btn_back"
+      src="./images/backbtn.png"
+      >
+    </div>
 
     <!-- Logo inferior -->
     <div class="play-brand-wrap">
@@ -235,25 +242,148 @@
           });
         }
 
-        function finishAndRedirect() {
-          stopGlobalTimer();
-          // Guarda resultado por si lo quieres leer en trivia.html
-          try {
-            const result = {
-              block: state.block,
-              score: state.score,
-              total: TOTAL_QUESTIONS,
-              answered: Math.min(state.idx, TOTAL_QUESTIONS),
-              startedAt: state.startedAt,
-              finishedAt: Date.now(),
-              timeSpentMs: Math.min(state.globalElapsed, TOTAL_TIME_MS),
-            };
-            sessionStorage.setItem("trivia_result", JSON.stringify(result));
-          } catch (e) {}
 
-          // Redirigir
-          window.location.href = "./trivia.html";
-        }
+// Evita dobles finales (por tiempo y por última respuesta a la vez)
+let ended = false;
+
+function finishAndRedirect() {
+  if (ended) return;
+  ended = true;
+
+  stopGlobalTimer();
+
+  // Guarda resultado por si lo usas en trivia.html
+  try {
+    const result = {
+      block: state.block,
+      score: state.score,
+      total: TOTAL_QUESTIONS,
+      answered: Math.min(state.idx, TOTAL_QUESTIONS),
+      startedAt: state.startedAt,
+      finishedAt: Date.now(),
+      timeSpentMs: Math.min(state.globalElapsed, TOTAL_TIME_MS),
+    };
+    sessionStorage.setItem("trivia_result", JSON.stringify(result));
+  } catch (e) {}
+
+  const isWin = (state.score === TOTAL_QUESTIONS);
+  showEndScreenInline(isWin);  // ⬅️ overlay inline + confeti si gana
+
+  // Redirige a los 5s
+  setTimeout(() => {
+    window.location.href = './trivia.html';
+  }, 5000);
+}
+
+
+// ================= Overlay inline (sin depender del CSS) =================
+function showEndScreenInline(isWin){
+  // Bloquea botones actuales
+  try {
+    Array.from(document.querySelectorAll('#answers button')).forEach(b => b.disabled = true);
+  } catch {}
+
+  // Contenedor overlay
+  const wrap = document.createElement('div');
+  wrap.setAttribute('role','dialog');
+  wrap.style.position = 'fixed';
+  wrap.style.inset = '0';
+  wrap.style.zIndex = '99999';
+  wrap.style.display = 'flex';
+  wrap.style.flexDirection = 'column';
+  wrap.style.alignItems = 'center';
+  wrap.style.justifyContent = 'center';
+  wrap.style.textAlign = 'center';
+  wrap.style.color = '#fff';
+  wrap.style.padding = '20px';
+
+  
+  // Fondo imagen (cambia la ruta si quieres otra)
+
+  wrap.style.background = 'url("./images/fondoruleta.png") center/cover no-repeat';
+
+  // Título con animación de entrada
+const h = document.createElement('h2');
+h.textContent = isWin ? 'Ganaste' : 'Vuelve a Intentarlo';
+h.style.margin = '0 0 16px 0';
+h.style.fontSize = '120px';
+h.style.lineHeight = '1';
+h.style.fontWeight = '800';
+h.style.textTransform = 'uppercase';
+h.style.opacity = '0';
+h.style.transform = 'scale(.6)';
+h.style.transition = 'all .45s cubic-bezier(.34,1.56,.64,1)';
+
+// Subtítulo
+const p = document.createElement('p');
+p.textContent = isWin ? '¡Perfecto! 10/10' : '¡Tú puedes! Una más y sale';
+p.style.margin = '0';
+p.style.fontSize = '40px';
+p.style.opacity = '0';
+p.style.transform = 'translateY(20px)';
+p.style.transition = 'all .5s ease-out .2s'; // entra después del título
+
+wrap.appendChild(h);
+wrap.appendChild(p);
+
+// ✅ ejecutar animación tras insertar en DOM
+setTimeout(() => {
+  h.style.opacity = '1';
+  h.style.transform = 'scale(1)';
+  p.style.opacity = '1';
+  p.style.transform = 'translateY(0)';
+}, 50);
+
+  document.body.appendChild(wrap);
+
+  // Confeti ligero si gana (auto-inyecta keyframes si faltan)
+  if (isWin) {
+    ensureConfettiKeyframes();
+    spawnConfettiInline(160); // cantidad de piezas
+  }
+}
+
+// Inyecta @keyframes si no existe (para no depender de tu CSS)
+function ensureConfettiKeyframes(){
+  if (document.getElementById('confetti-style')) return;
+  const st = document.createElement('style');
+  st.id = 'confetti-style';
+  st.textContent = `
+  @keyframes __confFall {
+    to { transform: translateY(110vh) rotate(360deg); opacity: 1; }
+  }`;
+  document.head.appendChild(st);
+}
+
+function spawnConfettiInline(n){
+  const colors = ['#f87171','#fbbf24','#34d399','#60a5fa','#a78bfa','#f472b6'];
+  const w = window.innerWidth;
+  for (let i=0;i<n;i++){
+    const piece = document.createElement('div');
+    const size = 6 + Math.random()*10; // 6..16
+    const left = Math.random() * w;
+    const dur = 2.5 + Math.random()*1.5; // 2.5..4s
+    const delay = Math.random()*0.3;     // 0..0.3s
+
+    piece.style.position = 'fixed';
+    piece.style.top = '-10vh';
+    piece.style.left = `${left}px`;
+    piece.style.width = `${size}px`;
+    piece.style.height = `${size*1.4}px`;
+    piece.style.borderRadius = '2px';
+    piece.style.opacity = '.9';
+    piece.style.background = colors[i % colors.length];
+    piece.style.transform = `translateY(-10vh) rotate(${Math.random()*180}deg)`;
+    piece.style.pointerEvents = 'none';
+    piece.style.zIndex = '100000';
+    piece.style.animation = `__confFall ${dur}s linear ${delay}s forwards`;
+
+    document.body.appendChild(piece);
+    setTimeout(() => piece.remove(), (dur+delay)*1000 + 50);
+  }
+}
+
+       
 
         async function loadQuestionsJSON() {
           const url = "./data/trivia.json";

@@ -53,6 +53,17 @@ progress::-moz-progress-bar{ background: #ffffffcc; border-radius: 999px; }
   opacity: .9;
 }
 
+
+
+.btn_back {
+  position: absolute;
+  width: 70px;
+  top: 100px;
+  right: 90px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
 /* Pregunta (texto blanco) */
 #qtext{
   color: #fff;
@@ -94,9 +105,10 @@ progress::-moz-progress-bar{ background: #ffffffcc; border-radius: 999px; }
 
 /* Progreso (0/10) opcional a la izquierda si lo usas */
 #progress{
-  display: inline-block;
-  margin: 6px 0 6px 0;
-  font-size: 14px;
+  top: 450px;
+  right: 100px;
+  position: absolute;
+  font-size: 74px;
   opacity: .9;
 }
 
@@ -211,4 +223,59 @@ progress::-moz-progress-bar{ background: #ffffffcc; border-radius: 999px; }
 }
 #title-time {
   animation: slideInLeftFast 1.35s cubic-bezier(.22,.61,.36,1) both;
+}
+
+
+
+
+
+
+/* ===== Pantalla final ===== */
+.end-screen{
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: #fff;
+  z-index: 9999;
+  background: url("../images/fondotriviabloques.png") center/cover no-repeat; /* <-- tu imagen */
+}
+
+/* Caja de texto (sin estilos pesados, para respetar tu diseño) */
+.end-wrap{
+  max-width: 90vw;
+  padding: 16px;
+}
+
+.end-title{
+  font-size: 120px;      /* grande para tu layout actual */
+  line-height: 1;
+  margin: 0 0 16px 0;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.end-sub{
+  font-size: 40px;
+  margin: 0;
+}
+
+/* ===== Confeti ligero (opcional al ganar) ===== */
+.confetti{
+  position: fixed;
+  top: -10vh;
+  width: 10px;
+  height: 16px;
+  border-radius: 2px;
+  opacity: .9;
+  z-index: 10000;
+  animation: confFall linear forwards;
+}
+
+@keyframes confFall{
+  to{
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 1;
+  }
 }

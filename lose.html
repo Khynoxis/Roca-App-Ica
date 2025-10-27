@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Sigue intentando</title>
+<style>
+  :root{
+    --stripe:#352e70;                          /* color de marca */
+    --bg:url("images/fondoruleta.png");        /* cambia el fondo si quieres */
+  }
+
+  html,body{height:100%;margin:0}
+  body{
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    color:#fff;
+    background:#000 var(--bg) no-repeat center/cover fixed;
+    display:grid; place-items:center;          /* centra vertical y horizontal */
+    cursor: pointer;                           /* indica que se puede tocar */
+    overflow:hidden;
+  }
+
+  /* Capa para dar contraste al texto */
+  .overlay{
+    position:fixed; inset:0;
+    background:linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.55));
+    z-index:0;
+    opacity:0;
+    animation: fadeIn .8s ease forwards;
+  }
+
+  .panel{
+    position:relative; z-index:1; text-align:center;
+    max-width:900px; padding:24px;
+    opacity:0; transform: translateY(12px) scale(.98);
+    animation: popIn .7s cubic-bezier(.2,.7,.2,1) .15s forwards;
+  }
+
+  h1{
+    margin:0 0 10px;
+    font-size:clamp(42px, 7vw, 72px);
+    font-weight:900;
+    letter-spacing:.5px;
+    transform-origin:center;
+    animation: softBeat 1.8s ease-in-out .6s infinite;
+  }
+
+  p{
+    margin:0;
+    font-size:clamp(16px, 3.5vw, 22px);
+    opacity:0;
+    animation: fadeIn .6s ease .45s forwards;
+  }
+  .count{ font-weight:800; }
+
+  /* ===== Animaciones ===== */
+  @keyframes fadeIn{
+    from{opacity:0}
+    to{opacity:1}
+  }
+  @keyframes popIn{
+    0%  {opacity:0; transform: translateY(12px) scale(.98)}
+    100%{opacity:1; transform: translateY(0)   scale(1)}
+  }
+  /* latido más suave que el de win */
+  @keyframes softBeat{
+    0%  { transform: scale(1) }
+    30% { transform: scale(1.035) }
+    55% { transform: scale(1) }
+    80% { transform: scale(1.045) }
+    100%{ transform: scale(1) }
+  }
+</style>
+</head>
+<body>
+<div class="overlay" aria-hidden="true"></div>
+
+<main class="panel" role="main" aria-labelledby="title" aria-describedby="desc">
+  <h1 id="title">Sigue intentando</h1>
+  <p id="desc">Cada intento te acerca más. ¡Tú puedes! Volviendo en <span class="count" id="count">5</span>…<br/>Toca cualquier parte para ir ahora.</p>
+</main>
+
+<script>
+(function(){
+  const SECS = 5;
+  const REDIRECT = 'index.html';
+
+  const countEl = document.getElementById('count');
+  let ended = false;
+
+  function go(){ location.href = REDIRECT; }
+  function safeGo(){
+    if (ended) return;
+    ended = true;
+    go();
+  }
+
+  // contador
+  let left = SECS;
+  countEl.textContent = left;
+  const t = setInterval(() => {
+    left--;
+    countEl.textContent = left;
+    if (left <= 0){ clearInterval(t); safeGo(); }
+  }, 1000);
+
+  // tap/click/tecla → volver ya
+  const opts = { capture:false, once:true, passive:true };
+  document.addEventListener('click',      safeGo, opts);
+  document.addEventListener('touchstart', safeGo, opts);
+  document.addEventListener('keydown',    () => safeGo(), { once:true });
+
+  // failsafe extra
+  setTimeout(safeGo, (SECS + 1) * 1000);
+})();
+</script>
+</body>
+</html>
