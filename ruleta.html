@@ -143,7 +143,7 @@
         --title-left-vp: 50%;
         --title-top-vp: 88px; /* mueve el título sin afectar el badge */
         --title-scale: 1;
-        --title-size: clamp(180px, 3.4vmin + 4px, 48px);
+        --title-size: clamp(130px, 3.4vmin + 4px, 48px);
         --title-weight: 800;
         --title-track: 0.4px;
 
@@ -704,29 +704,24 @@
           currentDeg = targetAbsNorm;
         }
 
-        
         wheel.addEventListener("transitionend", () => {
-  spinning = false;
+          spinning = false;
 
-  const winner = window.__lastWinner ?? 0;
+          const winner = window.__lastWinner ?? 0;
 
-  // Mostrar overlay con la imagen del premio
-  showPrizeOverlay(winner);
+          // Mostrar overlay con la imagen del premio
+          showPrizeOverlay(winner);
 
-  // Confeti visible (tu canvas ya está con z-index por encima)
-  releaseConfetti();
+          // Confeti visible (tu canvas ya está con z-index por encima)
+          releaseConfetti();
 
-  // A los 5s: ocultar overlay y redirigir
-  setTimeout(() => {
-    hidePrizeOverlay();
-    window.location.href = REDIRECT_URL; // "index.html"
-  }, 5000);
-});
+          // A los 5s: ocultar overlay y redirigir
+          setTimeout(() => {
+            hidePrizeOverlay();
+            window.location.href = REDIRECT_URL; // "index.html"
+          }, 5000);
+        });
 
-
-
-
-      
         tapLayer.addEventListener("click", spin, { passive: true });
         tapLayer.addEventListener(
           "touchstart",
