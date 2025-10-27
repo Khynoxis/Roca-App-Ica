@@ -217,6 +217,7 @@
         cursor: pointer;
       }
       .start-btn img {
+        margin-top: 140px;
         width: min(50vw, 500px);
         height: auto;
         display: block;
@@ -244,6 +245,37 @@
 }
 
 
+/* Comprobación rápida: si ves un borde rojo, el CSS sí carga */
+.brand .logo-anim { outline: 1px solid transparent; } /* cambia a red si quieres probar */
+
+/* Tamaño y posición que ya usabas */
+.brand .logo-anim{
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
+  margin-left: 650px;
+  margin-top: -70px;
+
+  /* Latido */
+  animation: logo-heartbeat 2.2s ease-in-out infinite !important;
+  transform-origin: center center;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+/* Si tienes OTRAS reglas que ponen transform al mismo img (hover/anim), desactívalas o combínalas */
+.brand .logo-anim:hover{ transform: none; }
+
+/* Keyframes únicos (evita choques de nombres) */
+@keyframes logo-heartbeat{
+  0%, 100% { transform: scale(1); }
+  14%      { transform: scale(1.06); }
+  28%      { transform: scale(0.98); }
+  42%      { transform: scale(1.05); }
+  70%      { transform: scale(1); }
+}
+
+/* IMPORTANTE: quita cualquier bloque que desactive animaciones por prefers-reduced-motion */
 
 
 
@@ -254,11 +286,12 @@
       <!-- Cabecera -->
       <header class="topbar">
         <div class="brand">
-          <img src="images/logoblue.png" alt="Logo" />
-          <h1 class="title">Despierta tu memoria con ROCA</h1>
-        </div>
+  <img class="logo-anim" src="images/logoblue.png" alt="Logo" />
+  <h1 class="title">Despierta tu memoria con ROCA</h1>
+</div>
+
         <div class="right">
-          <div class="timer" id="timer">45</div>
+          <div class="timer" id="timer">30</div>
           <button id="resetBtn" style="opacity: 0">Reiniciar</button>
         </div>
       </header>
@@ -300,7 +333,7 @@
           "images/6.png",
         ];
         const CARD_BACK = "images/back.png";
-        const START_SECONDS = 45;
+        const START_SECONDS = 30;
         const REDIRECT_URL = "index.html";
 
         // =========================
@@ -347,7 +380,7 @@
           return arr;
         }
         function paintTimer() {
-          timerEl.textContent = `${remaining} seg`;
+          timerEl.textContent = `${remaining}`;
         }
         function goHome(delay = 150) {
           setTimeout(() => {

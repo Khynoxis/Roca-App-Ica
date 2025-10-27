@@ -58,7 +58,7 @@
         const BLOCK_SIZE = 10; // 10 preguntas por bloque
         const TOTAL_BLOCKS = 5; // 5 bloques (50 preguntas)
         const TOTAL_QUESTIONS = 10; // se responden las 10 del bloque
-        const TOTAL_TIME_MS = 60000; // 1 minuto total
+        const TOTAL_TIME_MS = 30000; // 1 minuto total
         const TICK_MS = 16; // refresco cronómetro
         const NEXT_DELAY_MS = 550; // pausa breve para mostrar verde/rojo antes de avanzar
 
@@ -316,7 +316,7 @@ h.style.transition = 'all .45s cubic-bezier(.34,1.56,.64,1)';
 
 // Subtítulo
 const p = document.createElement('p');
-p.textContent = isWin ? '¡Perfecto! 10/10' : '¡Tú puedes! Una más y sale';
+p.textContent = isWin ? '' : '';
 p.style.margin = '0';
 p.style.fontSize = '40px';
 p.style.opacity = '0';
