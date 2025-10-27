@@ -75,21 +75,23 @@
         z-index: 1;
       }
 
-      /* Timer movible */
-      .timer {
-        position: absolute;
-        top: 50px;
-        left: 60px;
-        z-index: 10;
-        background: var(--stripe);
-        color: #fff;
-        font-weight: 700;
-        font-size: 60px;
-        padding: 10px 36px;
-        border: none;
-        border-radius: 32px;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-      }
+      /* Timer movible (centrado arriba) */
+.timer {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  background: var(--stripe);
+  color: #fff;
+  font-weight: 700;
+  font-size: 60px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 32px;
+  box-shadow: 0 4px 14px rgba(0,0,0,.25);
+}
+
 
       /* =========================
    * Botón genérico
@@ -228,6 +230,23 @@
           font-size: 16px;
         }
       }
+
+
+
+
+.btn_back {
+  position: absolute;
+  width: 100px;
+  top: 60px;
+  left: 100px;
+  cursor: pointer;
+  z-index: 500000;
+}
+
+
+
+
+
     </style>
   </head>
   <body>
@@ -239,7 +258,7 @@
           <h1 class="title">Despierta tu memoria con ROCA</h1>
         </div>
         <div class="right">
-          <div class="timer" id="timer">45 Seg</div>
+          <div class="timer" id="timer">45</div>
           <button id="resetBtn" style="opacity: 0">Reiniciar</button>
         </div>
       </header>
@@ -255,6 +274,13 @@
       <main class="board">
         <div id="grid" class="grid" aria-label="Tablero memoria 3 por 4"></div>
       </main>
+    </div>
+
+<div class="btnback" onclick="window.location.href='index.html'">
+      <img 
+      class="btn_back"
+      src="./images/home.png"
+      >
     </div>
 
     <!-- Audio (una sola vez) -->
@@ -321,7 +347,7 @@
           return arr;
         }
         function paintTimer() {
-          timerEl.textContent = `${remaining} Seg`;
+          timerEl.textContent = `${remaining} seg`;
         }
         function goHome(delay = 150) {
           setTimeout(() => {

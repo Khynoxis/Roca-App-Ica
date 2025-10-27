@@ -130,10 +130,10 @@
       :root {
         /* Badge */
         --badge-left-vp: 60%; /* 0–100% del ancho de la ventana */
-        --badge-top-vp: 200px; /* px desde la parte superior */
+        --badge-top-vp: 260px; /* px desde la parte superior */
         --badge-scale: 1;
         --badge-rotate: -8deg;
-        --badge-size: clamp(34px, 2.6vmin, 26px);
+        --badge-size: clamp(24px, 2.6vmin, 26px);
         --badge-pad-y: 0.6em;
         --badge-pad-x: 0.9em;
         --badge-radius: 10px;
@@ -141,7 +141,7 @@
 
         /* Title (totalmente independiente del badge) */
         --title-left-vp: 50%;
-        --title-top-vp: 88px; /* mueve el título sin afectar el badge */
+        --title-top-vp: 150px; /* mueve el título sin afectar el badge */
         --title-scale: 1;
         --title-size: clamp(130px, 3.4vmin + 4px, 48px);
         --title-weight: 800;
@@ -311,6 +311,16 @@
         font-weight: 800;
         letter-spacing: 0.4px;
       }
+
+
+      .btn_back {
+  position: absolute;
+  width: 100px;
+  top: 170px;
+  right: 90px;
+  cursor: pointer;
+  z-index: 1000;
+}
     </style>
   </head>
   <body>
@@ -346,6 +356,7 @@
         <div id="bottom-text">¡GIRA LA RULETA Y GANA!</div>
       </div>
 
+      
       <!-- Efectos/interacción -->
       <canvas id="confetti"></canvas>
       <button id="tap-layer" aria-label="Tocar para girar"></button>
@@ -358,464 +369,379 @@
       </div>
     </div>
 
+    <div class="btnback" onclick="window.location.href='index.html'">
+      <img 
+      class="btn_back"
+      src="./images/homeblanck.png"
+      >
+    </div>
     <script>
-      (function () {
-        // ===== Configuración =====
-        // 10 imágenes (una por partición, en orden horario empezando arriba)
-        const SLOTS = [
-          "images/slot01.png",
-          "images/slot02.png",
-          "images/slot03.png",
-          "images/slot04.png",
-          "images/slot05.png",
-          "images/slot06.png",
-          "images/slot07.png",
-          "images/slot08.png",
-          "images/slot09.png",
-          "images/slot10.png",
-        ];
-        // Texto que se mostrará en el overlay por cada slot (ajústalo a tu gusto)
-        const PRIZE_LABELS = [
-          "Sigue Intentando",
-          "Hola",
-          "Hola",
-          "Hola",
-          "Hola",
-          "Hola",
-          "Hola",
-          "Hola",
-          "Hola",
-          "Hola",
-        ];
+(function () {
+  // ===== Configuración =====
+  // 9 imágenes (una por partición, en orden horario empezando arriba)
+  const SLOTS = [
+    "images/slot01.png",
+    "images/slot02.png",
+    "images/slot03.png",
+    "images/slot04.png",
+    "images/slot06.png",
+    // "images/slot06.png",  // eliminado
+    "images/slot07.png",
+    "images/slot08.png",
+    "images/slot09.png",
+    "images/slot10.png",
+  ];
 
-        const REDIRECT_URL = "index.html"; // <- cambia si tu archivo se llama distinto
+  // Texto del overlay por cada slot (exactamente 9)
+  const PRIZE_LABELS = [
+    "Sigue Intentando",
+    "Hola",
+    "Hola",
+    "Hola",
+    "Hola",
+    "Hola",
+    "Hola",
+    "Hola",
+    "Hola",
+  ];
 
-        const TOP_TEXT = "¡Gira la ruleta y gana!";
-        const BADGE_TEXT = "PROMOCIÓN";
-        const BOTTOM_TEXT = "Toca en cualquier parte para comenzar a girar";
+  const REDIRECT_URL = "index.html";
 
-        // DOM
-        const wheel = document.getElementById("wheel");
-        const canvas = document.getElementById("wheel-canvas");
-        const ctx = canvas.getContext("2d");
+  const TOP_TEXT = "¡Gira la ruleta y gana!";
+  const BADGE_TEXT = "PROMOCIÓN";
+  const BOTTOM_TEXT = "Toca en cualquier parte para comenzar a girar";
 
-        const confettiCanvas = document.getElementById("confetti");
-        const cctx = confettiCanvas.getContext("2d");
-        document.getElementById("title-text").textContent = TOP_TEXT;
-        document.getElementById("badge-text").textContent = BADGE_TEXT;
-        document.getElementById("bottom-text").textContent = BOTTOM_TEXT;
-        const tapLayer = document.getElementById("tap-layer");
+  // DOM
+  const wheel = document.getElementById("wheel");
+  const canvas = document.getElementById("wheel-canvas");
+  const ctx = canvas.getContext("2d");
 
-        const overlay = document.getElementById("prize-overlay");
-        const prizeImg = document.getElementById("prize-img");
-        const prizeText = document.getElementById("prize-label");
+  const confettiCanvas = document.getElementById("confetti");
+  const cctx = confettiCanvas.getContext("2d");
 
-        function showPrizeOverlay(index) {
-          // Imagen del premio
-          prizeImg.src = SLOTS[index]; // usa tu imagen del slot
-          // Texto del premio
-          prizeText.textContent = PRIZE_LABELS[index] || `Premio ${index + 1}`;
+  // Ojo: tienes 2 elementos con id="bottom-text" en el HTML.
+  // document.getElementById() devuelve el primero. Funciona, pero lo ideal es dejar solo uno.
+  document.getElementById("title-text").textContent = TOP_TEXT;
+  document.getElementById("badge-text").textContent = BADGE_TEXT;
+  document.getElementById("bottom-text").textContent = BOTTOM_TEXT;
 
-          // Mostrar
-          overlay.style.display = "flex";
+  const tapLayer = document.getElementById("tap-layer");
+  const overlay = document.getElementById("prize-overlay");
+  const prizeImg = document.getElementById("prize-img");
+  const prizeText = document.getElementById("prize-label");
 
-          // pequeña animación de entrada (JS, sin CSS)
-          overlay.style.opacity = "0";
-          overlay.style.transition = "opacity .25s ease";
-          requestAnimationFrame(() => (overlay.style.opacity = "1"));
+  function showPrizeOverlay(index) {
+    prizeImg.src = SLOTS[index];
+    prizeText.textContent = PRIZE_LABELS[index] || `Premio ${index + 1}`;
+    overlay.style.display = "flex";
+    overlay.style.opacity = "0";
+    overlay.style.transition = "opacity .25s ease";
+    requestAnimationFrame(() => (overlay.style.opacity = "1"));
+  }
+
+  function hidePrizeOverlay() {
+    overlay.style.opacity = "0";
+    setTimeout(() => {
+      overlay.style.display = "none";
+    }, 250);
+  }
+
+  // DPR
+  const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+
+  // Geometría ruleta
+  const PARTS = SLOTS.length;      // <<<<<< clave: ahora 9
+  const TWO_PI = Math.PI * 2;
+  const SLICE = TWO_PI / PARTS;
+
+  // Colores alternos + aro exterior blanco
+  const COLORS = ["#fefefe", "#a6a6a6",  "#dcdcdc"];
+  const WHITE_RING = 10;
+  const GAP_RING = 22;
+
+  // -------- Precarga de imágenes --------
+  let imgs = new Array(PARTS).fill(null);
+
+  function loadImage(src, idx) {
+    return new Promise((resolve) => {
+      const im = new Image();
+      im.onload = async () => {
+        if (im.decode) {
+          try { await im.decode(); } catch (e) {}
         }
+        imgs[idx] = im;
+        resolve(true);
+      };
+      im.onerror = () => {
+        imgs[idx] = null;
+        resolve(false);
+      };
+      im.src = src;
+    });
+  }
 
-        function hidePrizeOverlay() {
-          overlay.style.opacity = "0";
-          setTimeout(() => {
-            overlay.style.display = "none";
-          }, 250);
-        }
+  async function preloadAll() {
+    await Promise.all(SLOTS.map((src, i) => loadImage(src, i)));
+    drawWheel();
+  }
 
-        // DPR
-        const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+  // -------- Canvas size & draw --------
+  function resizeWheelCanvas() {
+    const box = canvas.parentElement.getBoundingClientRect();
+    const width = Math.max(1, Math.floor(box.width));
+    const height = Math.max(1, Math.floor(box.height));
+    canvas.width = Math.round(width * DPR);
+    canvas.height = Math.round(height * DPR);
+    canvas.style.width = width + "px";
+    canvas.style.height = height + "px";
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    drawWheel();
+  }
 
-        // Geometría ruleta
-        const PARTS = 10;
-        const TWO_PI = Math.PI * 2;
-        const SLICE = TWO_PI / PARTS;
+  function drawWheel() {
+    const w = canvas.width / DPR;
+    const h = canvas.height / DPR;
+    if (w <= 0 || h <= 0) return;
 
-        // Colores alternos solicitados + aro exterior blanco
-        const COLORS = ["#fefefe", "#a6a6a6"];
-        const WHITE_RING = 10;
-        const GAP_RING = 22;
+    const cx = w / 2, cy = h / 2;
+    ctx.clearRect(0, 0, w, h);
 
-        // -------- Precarga robusta de imágenes --------
-        let imgs = new Array(PARTS).fill(null);
-        let loadedCount = 0;
-        let allDecoded = false;
+    const R_max = Math.min(w, h) / 2;
+    const R_sectors = R_max - WHITE_RING - GAP_RING - 1;
+    const R_ringMid = R_sectors + GAP_RING + WHITE_RING / 2;
+    const innerR = R_sectors * 0.1;
 
-        function loadImage(src, idx) {
-          return new Promise((resolve) => {
-            const im = new Image();
-            im.onload = async () => {
-              // Intenta decodificar para evitar "cargado pero no pintable"
-              if (im.decode) {
-                try {
-                  await im.decode();
-                } catch (e) {
-                  /* fallback si falla decode() */
-                }
-              }
-              imgs[idx] = im;
-              loadedCount++;
-              resolve(true);
-            };
-            im.onerror = () => {
-              imgs[idx] = null;
-              loadedCount++;
-              resolve(false);
-            };
-            im.src = src;
-          });
-        }
+    for (let i = 0; i < PARTS; i++) {
+      const start = i * SLICE - Math.PI / 2;
+      const end = start + SLICE;
 
-        async function preloadAll() {
-          await Promise.all(SLOTS.map((src, i) => loadImage(src, i)));
-          allDecoded = true;
-          drawWheel(); // redibuja con todas listas
-        }
+      // sector
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, R_sectors, start, end);
+      ctx.closePath();
+      ctx.fillStyle = COLORS[i % 3];
+      ctx.fill();
 
-        // -------- Canvas size & draw --------
-        function resizeWheelCanvas() {
-          const box = canvas.parentElement.getBoundingClientRect();
-          const width = Math.max(1, Math.floor(box.width));
-          const height = Math.max(1, Math.floor(box.height));
-          canvas.width = Math.round(width * DPR);
-          canvas.height = Math.round(height * DPR);
-          canvas.style.width = width + "px";
-          canvas.style.height = height + "px";
-          ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-          drawWheel();
-        }
+      // imagen
+      const mid = (start + end) / 2;
+      const img = imgs[i];
+      const IMG_SCALE = 0.35;
+      const RADIAL = 0.62;
+      const IMG_MAX = 700;
 
-        function drawWheel() {
-          const w = canvas.width / DPR;
-          const h = canvas.height / DPR;
-          if (w <= 0 || h <= 0) return;
+      const imgSize = Math.min(R_sectors * IMG_SCALE, IMG_MAX);
+      const px = cx + Math.cos(mid) * (R_sectors * RADIAL);
+      const py = cy + Math.sin(mid) * (R_sectors * RADIAL);
 
-          const cx = w / 2,
-            cy = h / 2;
-          ctx.clearRect(0, 0, w, h);
+      ctx.save();
+      ctx.translate(px, py);
+      ctx.rotate(mid + Math.PI / 2);
+      if (img && img.naturalWidth > 0) {
+        ctx.drawImage(img, -imgSize / 2, -imgSize / 2, imgSize, imgSize);
+      } else {
+        // placeholder
+        ctx.fillStyle = "#000";
+        ctx.fillRect(-18, -12, 36, 24);
+        ctx.fillStyle = "#fff";
+        ctx.font = "bold 16px system-ui";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(String(i + 1), 0, 0);
+      }
+      ctx.restore();
+    }
 
-          // Radio máximo disponible hasta el borde del canvas, dejando todo el anillo afuera
-          const R_max = Math.min(w, h) / 2;
+    // centro
+    ctx.beginPath();
+    ctx.arc(cx, cy, innerR, 0, TWO_PI);
+    ctx.fillStyle = "black";
+    ctx.fill();
 
-          // Radio donde terminan los SECTORES (dentro):
-          const R_sectors = R_max - WHITE_RING - GAP_RING - 1;
+    ctx.beginPath();
+    ctx.arc(cx, cy, innerR * 0.82, 0, TWO_PI);
+    ctx.fillStyle = "#328290";
+    ctx.fill();
 
-          // Radio medio del anillo para trazar el stroke:
-          const R_ringMid = R_sectors + GAP_RING + WHITE_RING / 2;
+    // anillo blanco exterior
+    ctx.save();
+    ctx.lineWidth = WHITE_RING;
+    ctx.strokeStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.arc(cx, cy, R_ringMid, 0, TWO_PI);
+    ctx.stroke();
+    ctx.restore();
+  }
 
-          // (opcional) disco central
-          const innerR = R_sectors * 0.1;
+  // Redibujar progresivo al cargar imágenes
+  SLOTS.forEach((src, i) => {
+    const im = new Image();
+    im.onload = async () => {
+      if (im.decode) { try { await im.decode(); } catch (e) {} }
+      imgs[i] = im;
+      drawWheel();
+    };
+    im.onerror = () => { imgs[i] = null; drawWheel(); };
+    im.src = src;
+  });
 
-          for (let i = 0; i < PARTS; i++) {
-            const start = i * SLICE - Math.PI / 2;
-            const end = start + SLICE;
+  // Resize + preload
+  if (window.ResizeObserver)
+    new ResizeObserver(resizeWheelCanvas).observe(canvas);
+  else
+    window.addEventListener("resize", resizeWheelCanvas);
+  window.addEventListener("orientationchange", () => setTimeout(resizeWheelCanvas, 150));
 
-            // Relleno alterno del sector
-            ctx.beginPath();
-            ctx.moveTo(cx, cy);
-            ctx.arc(cx, cy, R_sectors, start, end);
-            ctx.closePath();
-            ctx.fillStyle = COLORS[i % 2];
-            ctx.fill();
+  window.addEventListener("load", () => {
+    requestAnimationFrame(resizeWheelCanvas);
+    preloadAll();
+  });
 
-            // Imagen para el slot i (si está lista)
-            const mid = (start + end) / 2; // ángulo medio del sector
-            const img = imgs[i];
+  // ---- Giro con tap ----
+  let spinning = false;
+  let hasSpun = false;
+  let currentDeg = 0;
 
-            // Control de tamaño y posición
-            const IMG_SCALE = 0.35; // ajusta si quieres más grande/pequeña
-            const RADIAL = 0.62; // 0.58 = más al centro, 0.68 = más cerca del borde
-            const IMG_MAX = 700;
+  const sliceDeg = 360 / PARTS;
 
-            const imgSize = Math.min(R_sectors * IMG_SCALE, IMG_MAX);
-            const px = cx + Math.cos(mid) * (R_sectors * RADIAL);
-            const py = cy + Math.sin(mid) * (R_sectors * RADIAL);
+  // pesos ajustados a PARTS
+  const WEIGHTS = Array(PARTS).fill(1);
 
-            if (img && img.naturalWidth > 0) {
-              // 👉 Rotamos la imagen para que “mire” hacia afuera (radial)
-              // mid apunta desde el centro hacia el sector; sumamos +90° para que la “cabeza” sea radial
-              ctx.save();
-              ctx.translate(px, py);
-              ctx.rotate(mid + Math.PI / 2);
-              ctx.drawImage(img, -imgSize / 2, -imgSize / 2, imgSize, imgSize);
-              ctx.restore();
-            } else {
-              // Placeholder mientras carga o si falla
-              ctx.save();
-              ctx.translate(px, py);
-              ctx.rotate(mid + Math.PI / 2);
-              ctx.fillStyle = "#000";
-              ctx.fillRect(-18, -12, 36, 24);
-              ctx.fillStyle = "#fff";
-              ctx.font = "bold 16px system-ui";
-              ctx.textAlign = "center";
-              ctx.textBaseline = "middle";
-              ctx.fillText(String(i + 1), 0, 0);
-              ctx.restore();
-            }
-          }
+  function pickWeighted(weights) {
+    const total = weights.reduce((a, b) => a + Math.max(0, b), 0) || 1;
+    let r = Math.random() * total, acc = 0;
+    for (let i = 0; i < weights.length; i++) {
+      acc += Math.max(0, weights[i]);
+      if (r <= acc) return i;
+    }
+    return weights.length - 1;
+  }
 
-          // ===== Centro de la ruleta (perillas) =====
-          const INNER_RATIO = 0.28; // antes 0.25 → disco central = 28% de R_sectors
-          const HUB_RATIO = 0.82; // puntito = 22% del disco central
-          const INNER_FILL = "black";
-          const INNER_STROKE = 0; // px. 0 = sin borde
-          const INNER_STROKE_COLOR = "#ffffff";
-          const HUB_FILL = "#328290";
+  function spin() {
+    if (spinning || hasSpun) return;
 
-          // Disco central
-          ctx.beginPath();
-          ctx.arc(cx, cy, innerR, 0, TWO_PI);
-          ctx.fillStyle = INNER_FILL;
-          ctx.fill();
-          if (INNER_STROKE > 0) {
-            ctx.lineWidth = INNER_STROKE;
-            ctx.strokeStyle = INNER_STROKE_COLOR;
-            ctx.stroke();
-          }
+    const tap = document.getElementById("tap-layer");
+    if (tap) tap.style.pointerEvents = "none";
 
-          // Punto central
-          ctx.beginPath();
-          ctx.arc(cx, cy, innerR * HUB_RATIO, 0, TWO_PI);
-          ctx.fillStyle = HUB_FILL;
-          ctx.fill();
+    spinning = true;
+    hasSpun = true;
+    document.getElementById("bottom-text").textContent = "Girando…";
 
-          // ANILLO BLANCO EXTERIOR con gap transparente antes del anillo
-          ctx.save();
-          ctx.lineWidth = WHITE_RING; // grosor del anillo
-          ctx.strokeStyle = "#ffffff";
-          ctx.beginPath();
-          ctx.arc(cx, cy, R_ringMid, 0, TWO_PI);
-          ctx.stroke();
-          ctx.restore();
-        }
+    const winner = pickWeighted(WEIGHTS);
+    window.__lastWinner = winner;
 
-        // Redibuja cada vez que una imagen termina (para que las “faltantes” aparezcan)
-        // Nota: preloadAll ya llama a drawWheel al final; esto actualiza progresivo.
-        SLOTS.forEach((src, i) => {
-          const im = new Image();
-          im.onload = async () => {
-            if (im.decode) {
-              try {
-                await im.decode();
-              } catch (e) {}
-            }
-            imgs[i] = im;
-            drawWheel();
-          };
-          im.onerror = () => {
-            imgs[i] = null;
-            drawWheel();
-          };
-          im.src = src;
-        });
+    const targetAbs = -(winner + 0.5) * sliceDeg;
+    const extraTurns = 5 + Math.floor(Math.random() * 4);
+    const targetAbsNorm = ((targetAbs % 360) + 360) % 360;
 
-        // Resize inicial y en cambios
-        if (window.ResizeObserver)
-          new ResizeObserver(resizeWheelCanvas).observe(canvas);
-        else window.addEventListener("resize", resizeWheelCanvas);
-        window.addEventListener("orientationchange", () =>
-          setTimeout(resizeWheelCanvas, 150)
-        );
+    let d = (targetAbsNorm - currentDeg) % 360;
+    if (d < 0) d += 360;
 
-        // Espera al layout para medir bien y precarga
-        window.addEventListener("load", () => {
-          requestAnimationFrame(resizeWheelCanvas);
-          preloadAll(); // dispara la precarga/decodificación
-        });
+    const target = currentDeg + extraTurns * 360 + d;
 
-        // ---- Giro con tap ----
-        let spinning = false;
-        // Bloqueo después del primer premio
-        let hasSpun = false;
-        let currentDeg = 0;
+    wheel.style.setProperty("--deg", target + "deg");
+    currentDeg = targetAbsNorm;
+  }
 
-        const sliceDeg = 360 / PARTS; // PARTS = 10
+  wheel.addEventListener("transitionend", () => {
+    spinning = false;
+    const winner = window.__lastWinner ?? 0;
+    showPrizeOverlay(winner);
+    releaseConfetti();
 
-        // Ángulo absoluto para que el CENTRO del slot i (0..9) quede en la punta (arriba)
-        function angleForSlotCenter(i) {
-          // Dibujo parte en -90° (arriba). Centro del slot i: (i+0.5)*sliceDeg - 90°.
-          // Para alinear con la punta, debemos rotar el wheel a:
-          // theta = -((i+0.5)*sliceDeg)
-          return -(i + 0.5) * sliceDeg;
-        }
+    setTimeout(() => {
+      hidePrizeOverlay();
+      window.location.href = REDIRECT_URL;
+    }, 5000);
+  });
 
-        // Delta mínima positiva de 'from' a 'to' (ambos en grados)
-        function deltaTo(fromDeg, toDeg) {
-          let d = (toDeg - fromDeg) % 360;
-          if (d < 0) d += 360;
-          return d;
-        }
+  tapLayer.addEventListener("click", spin, { passive: true });
+  tapLayer.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    spin();
+  }, { passive: false });
 
-        // (Opcional) pesos por slot; si no quieres ponderación, borra esto y usa winner = Math.floor(Math.random()*PARTS)
-        const WEIGHTS = Array(PARTS).fill(1); // todos iguales (ajusta si quieres probabilidades distintas)
-        function pickWeighted(weights) {
-          const total = weights.reduce((a, b) => a + Math.max(0, b), 0) || 1;
-          let r = Math.random() * total,
-            acc = 0;
-          for (let i = 0; i < weights.length; i++) {
-            acc += Math.max(0, weights[i]);
-            if (r <= acc) return i;
-          }
-          return weights.length - 1;
-        }
+  // ---- Confeti ----
+  function resizeConfetti() {
+    confettiCanvas.width = window.innerWidth * DPR;
+    confettiCanvas.height = window.innerHeight * DPR;
+    cctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  window.addEventListener("resize", resizeConfetti);
+  resizeConfetti();
 
-        function spin() {
-          // si ya está girando o ya se usó una vez, no hacer nada
-          if (spinning || hasSpun) return;
+  let confettiParticles = [];
+  let animating = false;
+  let redirectPending = false;
 
-          const tap = document.getElementById("tap-layer");
-          if (tap) tap.style.pointerEvents = "none"; // ❌ no más taps
+  function releaseConfetti() {
+    const count = 120;
+    const stage = document.querySelector(".stage").getBoundingClientRect();
+    const fromX = stage.left + stage.width / 2;
+    const fromY = stage.top + stage.height * 0.2;
 
-          spinning = true;
-          hasSpun = true; // 🔒 bloquea siguientes giros
-          document.getElementById("bottom-text").textContent = "Girando…";
+    for (let i = 0; i < count; i++) {
+      confettiParticles.push({
+        x: fromX + (Math.random() * 140 - 70),
+        y: fromY,
+        vx: Math.random() * 6 - 3,
+        vy: -Math.random() * 10 - 6,
+        g: 0.32 + Math.random() * 0.2,
+        size: 6 + Math.random() * 6,
+        rot: Math.random() * Math.PI * 2,
+        vr: (Math.random() - 0.5) * 0.2,
+        alpha: 1,
+        shape: Math.random() < 0.5 ? "rect" : "circle",
+        color: `hsl(${Math.floor(Math.random() * 360)},85%,60%)`,
+      });
+    }
+    if (!animating) animateConfetti();
+  }
 
-          // ganador (ponderado o uniforme)
-          const winner = pickWeighted
-            ? pickWeighted(WEIGHTS)
-            : Math.floor(Math.random() * PARTS);
+  function animateConfetti() {
+    animating = true;
+    const w = confettiCanvas.width / DPR;
+    const h = confettiCanvas.height / DPR;
+    cctx.clearRect(0, 0, w, h);
 
-          // guarda el ganador
-          window.__lastWinner = winner;
+    confettiParticles.forEach((p) => {
+      p.vy += p.g;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rot += p.vr;
+      p.alpha -= 0.006;
+      cctx.globalAlpha = Math.max(0, p.alpha);
+      cctx.save();
+      cctx.translate(p.x, p.y);
+      cctx.rotate(p.rot);
+      cctx.fillStyle = p.color;
+      if (p.shape === "rect")
+        cctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+      else {
+        cctx.beginPath();
+        cctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+        cctx.fill();
+      }
+      cctx.restore();
+    });
+    cctx.globalAlpha = 1;
 
-          // calcula el objetivo centrado
-          const sliceDeg = 360 / PARTS;
-          const targetAbs = -(winner + 0.5) * sliceDeg; // centro del slot en la punta
-          const extraTurns = 5 + Math.floor(Math.random() * 4); // 5–8 vueltas
-          const targetAbsNorm = ((targetAbs % 360) + 360) % 360;
+    confettiParticles = confettiParticles.filter(
+      (p) => p.alpha > 0 && p.y < h + 40
+    );
 
-          let d = (targetAbsNorm - currentDeg) % 360;
-          if (d < 0) d += 360;
+    if (confettiParticles.length > 0) {
+      requestAnimationFrame(animateConfetti);
+    } else {
+      animating = false;
+      if (redirectPending) {
+        redirectPending = false;
+        setTimeout(() => { window.location.href = REDIRECT_URL; }, 250);
+      }
+    }
+  }
+})();
+</script>
 
-          const target = currentDeg + extraTurns * 360 + d;
-
-          // aplica rotación
-          wheel.style.setProperty("--deg", target + "deg");
-          currentDeg = targetAbsNorm;
-        }
-
-        wheel.addEventListener("transitionend", () => {
-          spinning = false;
-
-          const winner = window.__lastWinner ?? 0;
-
-          // Mostrar overlay con la imagen del premio
-          showPrizeOverlay(winner);
-
-          // Confeti visible (tu canvas ya está con z-index por encima)
-          releaseConfetti();
-
-          // A los 5s: ocultar overlay y redirigir
-          setTimeout(() => {
-            hidePrizeOverlay();
-            window.location.href = REDIRECT_URL; // "index.html"
-          }, 5000);
-        });
-
-        tapLayer.addEventListener("click", spin, { passive: true });
-        tapLayer.addEventListener(
-          "touchstart",
-          (e) => {
-            e.preventDefault();
-            spin();
-          },
-          { passive: false }
-        );
-
-        // ---- Confeti básico ----
-        function resizeConfetti() {
-          confettiCanvas.width = window.innerWidth * DPR;
-          confettiCanvas.height = window.innerHeight * DPR;
-          cctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-        }
-        window.addEventListener("resize", resizeConfetti);
-        resizeConfetti();
-
-        let confettiParticles = [];
-        let animating = false;
-        let redirectPending = false;
-
-        function releaseConfetti() {
-          const count = 120;
-          const stage = document
-            .querySelector(".stage")
-            .getBoundingClientRect();
-          const fromX = stage.left + stage.width / 2;
-          const fromY = stage.top + stage.height * 0.2;
-          for (let i = 0; i < count; i++) {
-            confettiParticles.push({
-              x: fromX + (Math.random() * 140 - 70),
-              y: fromY,
-              vx: Math.random() * 6 - 3,
-              vy: -Math.random() * 10 - 6,
-              g: 0.32 + Math.random() * 0.2,
-              size: 6 + Math.random() * 6,
-              rot: Math.random() * Math.PI * 2,
-              vr: (Math.random() - 0.5) * 0.2,
-              alpha: 1,
-              shape: Math.random() < 0.5 ? "rect" : "circle",
-              color: `hsl(${Math.floor(Math.random() * 360)},85%,60%)`,
-            });
-          }
-          if (!animating) animateConfetti();
-        }
-
-        function animateConfetti() {
-          animating = true;
-          const w = confettiCanvas.width / DPR;
-          const h = confettiCanvas.height / DPR;
-          cctx.clearRect(0, 0, w, h);
-
-          confettiParticles.forEach((p) => {
-            p.vy += p.g;
-            p.x += p.vx;
-            p.y += p.vy;
-            p.rot += p.vr;
-            p.alpha -= 0.006;
-            cctx.globalAlpha = Math.max(0, p.alpha);
-            cctx.save();
-            cctx.translate(p.x, p.y);
-            cctx.rotate(p.rot);
-            cctx.fillStyle = p.color;
-            if (p.shape === "rect")
-              cctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
-            else {
-              cctx.beginPath();
-              cctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
-              cctx.fill();
-            }
-            cctx.restore();
-          });
-          cctx.globalAlpha = 1;
-
-          confettiParticles = confettiParticles.filter(
-            (p) => p.alpha > 0 && p.y < h + 40
-          );
-
-          if (confettiParticles.length > 0) {
-            requestAnimationFrame(animateConfetti);
-          } else {
-            animating = false;
-            // >>> Al acabar el confeti, redirige si está pendiente
-            if (redirectPending) {
-              redirectPending = false; // resetea por si acaso
-              setTimeout(() => {
-                window.location.href = REDIRECT_URL;
-              }, 250); // pequeño colchón para que el último frame se vea
-            }
-          }
-        }
-      })();
-    </script>
   </body>
 </html>

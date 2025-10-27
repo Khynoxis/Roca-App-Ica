@@ -25,7 +25,7 @@
   --text-size: clamp(56px, 2.2vh, 22px);
   --logo-shift: -100px; /* positivo = baja el logo, negativo = sube el logo */
   --text-shift: -160px; /* positivo = baja el texto, negativo = sube el texto */
-  --btn-shift: -100px;  /* positivo = baja los botones, negativo = sube los botones */
+  --btn-shift: -100px; /* positivo = baja los botones, negativo = sube los botones */
 
   /* Botón neón */
   --neon-border: 8px;
@@ -33,18 +33,27 @@
   --neon-font: clamp(52px, 3vh, 36px);
 
   /* Niveles de brillo (externo + interno) */
-  --neon-outer-1: 0 0 14px rgba(255,255,255,.95), 0 0 36px rgba(255,255,255,.85);
-  --neon-outer-2: 0 0 22px rgba(255,255,255,1),   0 0 56px rgba(255,255,255,.95), 0 0 96px rgba(255,255,255,.9);
-  --neon-inner-1: inset 0 0 8px  rgba(255,255,255,.70), inset 0 0 16px rgba(255,255,255,.55);
-  --neon-inner-2: inset 0 0 14px rgba(255,255,255,.85), inset 0 0 26px rgba(255,255,255,.70);
+  --neon-outer-1: 0 0 14px rgba(255, 255, 255, 0.95),
+    0 0 36px rgba(255, 255, 255, 0.85);
+  --neon-outer-2: 0 0 22px rgba(255, 255, 255, 1),
+    0 0 56px rgba(255, 255, 255, 0.95), 0 0 96px rgba(255, 255, 255, 0.9);
+  --neon-inner-1: inset 0 0 8px rgba(255, 255, 255, 0.7),
+    inset 0 0 16px rgba(255, 255, 255, 0.55);
+  --neon-inner-2: inset 0 0 14px rgba(255, 255, 255, 0.85),
+    inset 0 0 26px rgba(255, 255, 255, 0.7);
 
   /* (Compat) valores antiguos usados en animaciones previas */
-  --neon-glow:        0 0 8px #fff, 0 0 18px #fff;
+  --neon-glow: 0 0 8px #fff, 0 0 18px #fff;
   --neon-glow-strong: 0 0 10px #fff, 0 0 24px #fff;
 }
 
-* { box-sizing: border-box; }
-html, body { height: 100%; }
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
 body {
   margin: 0;
   color: #fff;
@@ -95,7 +104,7 @@ body {
 }
 
 /* Logo centrado */
-.logo{
+.logo {
   width: 100%;
   max-width: var(--logo-max-w);
   height: auto;
@@ -160,17 +169,14 @@ body {
   box-shadow: var(--neon-outer-2), var(--neon-inner-2);
 }
 .neonbtn:active {
-  transform: translateY(1px) scale(.992); /* micro hundimiento */
+  transform: translateY(1px) scale(0.992); /* micro hundimiento */
   box-shadow: var(--neon-outer-1), var(--neon-inner-1);
 }
 
 /* Accesible */
 .neonbtn:focus-visible {
   outline: none;
-  box-shadow:
-    0 0 0 2px #000,
-    0 0 0 6px #fff,
-    var(--neon-outer-2),
+  box-shadow: 0 0 0 2px #000, 0 0 0 6px #fff, var(--neon-outer-2),
     var(--neon-inner-2);
 }
 
@@ -184,109 +190,172 @@ body {
 
 /* Variante compacta */
 @media (max-width: 480px) {
-  .neonbtn { max-width: 94vw; }
+  .neonbtn {
+    max-width: 94vw;
+  }
 }
 
 /* ==== ANIMACIONES (añadidos) ==== */
 
 /* Fondo: zoom muy sutil (no cambia layout) */
-.bg{
+.bg {
   will-change: transform;
   animation: bgZoom 60s ease-in-out infinite alternate;
 }
-@keyframes bgZoom{
-  from{ transform: scale(1); }
-  to{   transform: scale(1.06); }
+@keyframes bgZoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
 }
 
 /* Entrada suave del logo + pulso leve de brillo */
-.logo{
-  animation: logoFade .8s ease-out both, logoGlow 4s ease-in-out .8s infinite;
+.logo {
+  animation: logoFade 0.8s ease-out both, logoGlow 4s ease-in-out 0.8s infinite;
 }
-@keyframes logoFade{
-  from{ opacity: 0; filter: blur(4px); }
-  to{   opacity: 1; filter: blur(0); }
-}
-@keyframes logoGlow{
-  0%,100%{
-    filter: drop-shadow(0 0 6px rgba(255,255,255,.55));
+@keyframes logoFade {
+  from {
+    opacity: 0;
+    filter: blur(4px);
   }
-  50%{
-    filter: drop-shadow(0 0 14px rgba(255,255,255,.9)) drop-shadow(0 0 28px rgba(255,255,255,.75));
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+@keyframes logoGlow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.55));
+  }
+  50% {
+    filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.9))
+      drop-shadow(0 0 28px rgba(255, 255, 255, 0.75));
   }
 }
 
 /* Tagline: aparición suave */
-.tagline{
+.tagline {
   opacity: 0;
-  animation: taglineIn .9s ease-out .1s forwards;
+  animation: taglineIn 0.9s ease-out 0.1s forwards;
 }
-@keyframes taglineIn{
-  to{ opacity: 1; }
+@keyframes taglineIn {
+  to {
+    opacity: 1;
+  }
 }
 
 /* Entrada escalonada de cada botón + pulso del brillo (animando EXTERNO y dejando INTERNO visible) */
-.btns .neonbtn{
+.btns .neonbtn {
   opacity: 0;
-  animation:
-    btnIn .6s ease-out forwards,
-    btnGlow 2.2s ease-in-out .2s infinite alternate;
+  animation: btnIn 0.6s ease-out forwards,
+    btnGlow .7s ease-in-out 0.2s infinite alternate;
 }
-.btns .neonbtn:nth-child(1){ animation-delay: .10s, .20s; }
-.btns .neonbtn:nth-child(2){ animation-delay: .52s, .20s; }
-.btns .neonbtn:nth-child(3){ animation-delay: .94s, .20s; }
+.btns .neonbtn:nth-child(1) {
+  animation-delay: 0.1s, 0.2s;
+}
+.btns .neonbtn:nth-child(2) {
+  animation-delay: 0.52s, 0.2s;
+}
+.btns .neonbtn:nth-child(3) {
+  animation-delay: 0.94s, 0.2s;
+}
 
-@keyframes btnIn{
-  from{ transform: translateY(10px); opacity:0; }
-  to  { transform: translateY(0);    opacity:1; }
+@keyframes btnIn {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 /* Pulso: EXTERNO varía, INTERNO se mantiene (y no desaparece) */
-@keyframes btnGlow{
-  from { box-shadow: var(--neon-outer-1), var(--neon-inner-1); }
-  to   { box-shadow: var(--neon-outer-2), var(--neon-inner-1); }
+@keyframes btnGlow {
+  from {
+    box-shadow: var(--neon-outer-1), var(--neon-inner-1);
+  }
+  to {
+    box-shadow: var(--neon-outer-2), var(--neon-inner-1);
+  }
 }
 
 /* Destello que recorre el borde */
-.neonbtn::before{
-  content:"";
-  position:absolute; inset:-2px;
+.neonbtn::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
   border-radius: var(--neon-radius);
   pointer-events: none;
-  background:
-    conic-gradient(from 0deg, transparent 0 20deg, rgba(255,255,255,.55) 21deg 25deg, transparent 26deg 360deg);
-  -webkit-mask:
-    radial-gradient(farthest-side, transparent calc(100% - var(--neon-border) - 2px), #000 calc(100% - var(--neon-border) - 1px));
-          mask:
-    radial-gradient(farthest-side, transparent calc(100% - var(--neon-border) - 2px), #000 calc(100% - var(--neon-border) - 1px));
-  animation: sweep 2.8s linear infinite;
-  opacity: .9;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0 20deg,
+    rgba(255, 255, 255, 0.55) 21deg 25deg,
+    transparent 26deg 360deg
+  );
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - var(--neon-border) - 2px),
+    #000 calc(100% - var(--neon-border) - 1px)
+  );
+  mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - var(--neon-border) - 2px),
+    #000 calc(100% - var(--neon-border) - 1px)
+  );
+  animation: sweep 0.8s linear infinite;
+  opacity: 0.9;
 }
-@keyframes sweep{ to { transform: rotate(360deg); } }
+@keyframes sweep {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 /* Ripple táctil/ratón (usa --mx/--my) */
-.neonbtn::after{
-  content:"";
-  position:absolute; inset:0;
+.neonbtn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
   border-radius: var(--neon-radius);
-  pointer-events:none;
-  background:
-    radial-gradient(240px 240px at var(--mx,50%) var(--my,50%), rgba(255,255,255,.18), transparent 60%);
+  pointer-events: none;
+  background: radial-gradient(
+    240px 240px at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.18),
+    transparent 60%
+  );
   opacity: 0;
-  transition: opacity .35s ease;
+  transition: opacity 0.35s ease;
 }
-.neonbtn:is(:hover,:active)::after{ opacity:.9; }
+.neonbtn:is(:hover, :active)::after {
+  opacity: 0.9;
+}
 
 /* ===== Entrada del logo (pop + rebote), compatible con tu --logo-shift ===== */
-.logo{
+.logo {
   /* combinamos con tu translate3d existente usando propiedades individuales */
   will-change: opacity, scale, translate;
-  animation:
-    logoIntro 720ms cubic-bezier(.22,.9,.25,1) both,   /* entrada */
-    logoGlow 4s ease-in-out .8s infinite;              /* tu glow continuo */
+  animation: logoIntro 720ms cubic-bezier(0.22, 0.9, 0.25, 1) both,
+    /* entrada */ logoGlow 4s ease-in-out 0.8s infinite; /* tu glow continuo */
 }
 
-@keyframes logoIntro{
-  0%   { opacity: 0; scale: .90; translate: 0 -16px; }
-  60%  { opacity: 1; scale: 1.5; translate: 0 8px;  }  /* overshoot */
-  100% { opacity: 1; scale: 1;    translate: 0 0;    }
+@keyframes logoIntro {
+  0% {
+    opacity: 0;
+    scale: 0.9;
+    translate: 0 -16px;
+  }
+  60% {
+    opacity: 1;
+    scale: 1.5;
+    translate: 0 8px;
+  } /* overshoot */
+  100% {
+    opacity: 1;
+    scale: 1;
+    translate: 0 0;
+  }
 }
