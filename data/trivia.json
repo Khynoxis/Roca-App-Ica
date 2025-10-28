@@ -420,14 +420,85 @@
       ],
       "c": 1
     },
-
-    { "q": "Aunfalta", "a": ["Aqui van alternativas"], "c": 0 },
-    { "q": "Aunfalta", "a": ["Aqui van alternativas"], "c": 0 },
-    { "q": "Aunfalta", "a": ["Aqui van alternativas"], "c": 0 },
-    { "q": "Aunfalta", "a": ["Aqui van alternativas"], "c": 0 },
-    { "q": "Aunfalta", "a": ["Aqui van alternativas"], "c": 0 },
-    { "q": "Aunfalta", "a": ["Aqui van alternativas"], "c": 0 },
-    { "q": "Aunfalta", "a": ["Aqui van alternativas"], "c": 0 },
-    { "q": "Aunfalta", "a": ["Aqui van alternativas"], "c": 0 }
+    {
+      "q": "En cirugía robótica de columna, ¿cuál es uno de los principales beneficios clínicos?",
+      "a": [
+        "Reducción de precisión por vibraciones",
+        "Mayor exactitud en la colocación de implantes",
+        "Mayor pérdida sanguínea",
+        "Menor control del cirujano"
+      ],
+      "c": 1
+    },
+    {
+      "q": "La navegación asistida por imagen en cirugía robótica permite:",
+      "a": [
+        "Disminuir el control visual del cirujano",
+        "Aumentar la exposición del campo quirúrgico",
+        "Planificar y guiar trayectorias con alta precisión",
+        "Sustituir completamente el juicio clínico"
+      ],
+      "c": 2
+    },
+    {
+      "q": "En neurocirugía, la integración de sistemas de navegación y robótica tiene como objetivo:",
+      "a": [
+        "Reducir la participación del anestesiólogo",
+        "Optimizar la precisión y seguridad en el acceso al sitio quirúrgico",
+        "Acortar el tiempo de recuperación anestésica",
+        "Eliminar el uso de imágenes intraoperatorias"
+      ],
+      "c": 1
+    },
+    {
+      "q": "Una ventaja clave de los sistemas robóticos compactos frente a los robots de gran tamaño es:",
+      "a": [
+        "Mayor facilidad de integración en quirófanos existentes",
+        "Necesidad de mayor calibración",
+        "Menor precisión en movimientos",
+        "Limitación a cirugías abiertas"
+      ],
+      "c": 0
+    },
+    {
+      "q": "En cirugía mínimamente invasiva, el soporte robótico estable facilita:",
+      "a": [
+        "Menor estabilidad de los instrumentos",
+        "Mayor fatiga del cirujano",
+        "Movimientos constantes y exactos durante procedimientos prolongados",
+        "Mayor necesidad de asistentes"
+      ],
+      "c": 2
+    },
+    {
+      "q": "En procedimientos de columna asistidos por robótica, la planificación preoperatoria basada en imágenes permite:",
+      "a": [
+        "Ajustar de forma virtual la trayectoria ideal del implante",
+        "Reducir la exposición radiológica del cirujano",
+        "Evitar la necesidad de navegación",
+        "Eliminar el control intraoperatorio"
+      ],
+      "c": 0
+    },
+    {
+      "q": "Los sistemas robóticos guiados por imagen son especialmente útiles en:",
+      "a": [
+        "Cirugías repetitivas sin precisión requerida",
+        "Procedimientos que demandan exactitud milimétrica",
+        "Intervenciones abiertas con gran campo visual",
+        "Procedimientos sin planificación previa"
+      ],
+      "c": 1
+    },
+    {
+      "q": "La robótica quirúrgica modular se considera una evolución porque:",
+      "a": [
+        "Requiere salas exclusivas de operación",
+        "Permite adaptar el robot al tipo de cirugía y especialidad",
+        "Solo puede usarse en neurocirugía",
+        "Sustituye por completo la navegación"
+      ],
+      "c": 1
+    }
   ]
 }
