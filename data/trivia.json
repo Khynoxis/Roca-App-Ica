@@ -1,504 +1,433 @@
 {
   "preguntas": [
     {
-      "q": "¿Cuál de los siguientes agentes se asocia más frecuentemente con broncoconstricción?",
+      "q": "¿Cuál es la principal ventaja de la cirugía laparoscópica frente a la cirugía abierta?",
       "a": [
-        "Isoflurano",
-        "Sevoflurano",
-        "Desflurano",
-        "Halotano"
+        "Mayor tamaño de incisión",
+        "Recuperación más rápida y con menor dolor postoperatorio",
+        "Mayor exposición de tejidos",
+        "Mayor riesgo de infección"
+      ],
+      "c": 1
+    },
+    {
+      "q": "En cirugía laparoscópica, ¿cuál es el rango de presión intraabdominal estándar recomendado para mantener una adecuada exposición y seguridad?",
+      "a": [
+        "8–10 mmHg",
+        "10–12 mmHg",
+        "12–15 mmHg",
+        "18–20 mmHg"
       ],
       "c": 2
     },
     {
-      "q": "Durante una anestesia general, un paciente presenta hipotensión tras inducción con propofol. ¿Cuál es la causa más probable?",
+      "q": "¿Qué gas se utiliza habitualmente para crear el neumoperitoneo?",
       "a": [
-        "Hipovolemia",
-        "Estimulación vagal",
-        "Vasodilatación periférica",
-        "Bloqueo simpático"
-      ],
-      "c": 2
-    },
-    {
-      "q": "¿Cuál es el principal objetivo de la preoxigenación antes de la inducción anestésica?",
-      "a": [
-        "Reducir atelectasias",
-        "Aumentar la reserva de oxígeno pulmonar",
-        "Mejorar la hemodinamia",
-        "Facilitar la intubación"
+        "Oxígeno",
+        "Dióxido de carbono (CO₂)",
+        "Aire ambiente",
+        "Óxido nitroso"
       ],
       "c": 1
     },
     {
-      "q": "En una anestesia balanceada, el opioide más utilizado para el control del dolor intraoperatorio es:",
+      "q": "Durante una laparoscopía, una caída súbita del EtCO₂ puede indicar:",
       "a": [
-        "Fentanilo",
-        "Remifentanilo",
-        "Morfina",
-        "Buprenorfina"
-      ],
-      "c": 0
-    },
-    {
-      "q": "Durante la anestesia, el rango de BIS recomendado para un nivel quirúrgico adecuado es:",
-      "a": [
-        "20–30",
-        "40–60",
-        "70–90",
-        "10–20"
-      ],
-      "c": 1
-    },
-    {
-      "q": "¿Cuál es el principal efecto adverso de la succinilcolina?",
-      "a": [
-        "Hipotermia",
-        "Hiperpotasemia",
-        "Bradicardia",
-        "Rabdomiólisis"
-      ],
-      "c": 1
-    },
-    {
-      "q": "Un paciente ASA III se programa para cirugía electiva. ¿Qué indica esta clasificación?",
-      "a": [
-        "Enfermedad sistémica severa",
-        "Riesgo vital inmediato",
-        "Enfermedad leve",
-        "Estado físico normal"
-      ],
-      "c": 0
-    },
-    {
-      "q": "¿Cuál de los siguientes inhalatorios tiene el inicio y recuperación más rápidos?",
-      "a": [
-        "Isoflurano",
-        "Desflurano",
-        "Sevoflurano",
-        "Halotano"
-      ],
-      "c": 1
-    },
-    {
-      "q": "En caso de laringoespasmo postextubación, la primera medida debe ser:",
-      "a": [
-        "Administrar relajante muscular",
-        "Aplicar presión positiva con oxígeno 100 %",
-        "Administrar naloxona",
-        "Reintubar inmediatamente"
-      ],
-      "c": 1
-    },
-    {
-      "q": "¿Qué agente anestésico inhalatorio es más adecuado en pacientes pediátricos por su olor no irritante?",
-      "a": [
-        "Isoflurano",
-        "Sevoflurano",
-        "Halotano",
-        "Desflurano"
-      ],
-      "c": 1
-    },
-    {
-      "q": "¿Cuál de los siguientes anestésicos locales pertenece al grupo de los ésteres?",
-      "a": [
-        "Lidocaína",
-        "Bupivacaína",
-        "Procaína",
-        "Ropivacaína"
-      ],
-      "c": 2
-    },
-    {
-      "q": "La bradicardia asociada a la anestesia espinal se debe principalmente a:",
-      "a": [
-        "Hipovolemia",
-        "Estimulación vagal",
-        "Bloqueo de las fibras simpáticas cardíacas",
-        "Hipoxia"
-      ],
-      "c": 2
-    },
-    {
-      "q": "¿Qué indica un aumento del EtCO₂ durante la anestesia?",
-      "a": [
-        "Hiperventilación",
-        "Fuga en el circuito",
         "Hipoventilación",
-        "Apnea"
+        "Aumento del metabolismo",
+        "Embolia gaseosa",
+        "Fuga del circuito anestésico"
       ],
       "c": 2
     },
     {
-      "q": "Durante la inducción de secuencia rápida, se aplica presión cricoidea para:",
+      "q": "¿Cuál es una ventaja principal del sistema de cámara Stryker 1688AIM?",
       "a": [
-        "Facilitar la intubación",
-        "Evitar el paso de aire al esófago",
-        "Prevenir aspiración gástrica",
-        "Disminuir el tono laríngeo"
+        "Alta resolución 4K y modalidades de imagen avanzado para la visualización de estructuras anatómicas",
+        "Requiere menos luz",
+        "Menor costo operativo",
+        "Mayor peso del cabezal"
+      ],
+      "c": 0
+    },
+    {
+      "q": "El sistema de visión 1688 AIM de Stryker ofrece:",
+      "a": [
+        "Mayor peso del endoscopio",
+        "Integración de NIRS para visualización de fluorescencia con Indocianina verde",
+        "Solo visión en HD",
+        "Control manual de balance de blancos"
+      ],
+      "c": 1
+    },
+    {
+      "q": "¿Cuál es el objetivo del uso de la energía bipolar?",
+      "a": [
+        "Permitir la coagulación, sellado y corte de tejidos con alto control y baja dispersión térmica",
+        "Generar corte más rápido",
+        "Sustituir el bisturí frío",
+        "Evitar el uso de generadores"
+      ],
+      "c": 0
+    },
+    {
+      "q": "El sistema BOWA ARC 400 se caracteriza por:",
+      "a": [
+        "Solo funcionamiento monopolar",
+        "No permite corte",
+        "Control inteligente de energía bipolar y sellado de vasos",
+        "Uso exclusivo en laparoscopía"
       ],
       "c": 2
     },
     {
-      "q": "El halotano está en desuso principalmente por:",
+      "q": "En cirugía robótica, una ventaja sobre la laparoscópica convencional es:",
       "a": [
-        "Hepatotoxicidad",
-        "Arritmias",
-        "Costo elevado",
-        "Baja potencia"
-      ],
-      "c": 0
-    },
-    {
-      "q": "En anestesia regional, la adición de epinefrina al anestésico local:",
-      "a": [
-        "Prolonga la duración del bloqueo",
-        "Aumenta la toxicidad",
-        "Disminuye la analgesia",
-        "Acelera la absorción"
-      ],
-      "c": 0
-    },
-    {
-      "q": "El agente más apropiado para la inducción en pacientes asmáticos es:",
-      "a": [
-        "Etomidato",
-        "Propofol",
-        "Tiopental",
-        "Midazolam"
-      ],
-      "c": 1
-    },
-    {
-      "q": "En caso de hipertermia maligna, el tratamiento específico es:",
-      "a": [
-        "Furosemida",
-        "Dantroleno",
-        "Diazepam",
-        "Dexmedetomidina"
-      ],
-      "c": 1
-    },
-    {
-      "q": "En anestesia general, la causa más frecuente de hipoxia al inicio de la ventilación mecánica es:",
-      "a": [
-        "Atelectasias",
-        "Neumotórax",
-        "Broncoespasmo",
-        "Desconexión del circuito"
-      ],
-      "c": 0
-    },
-    {
-      "q": "¿Qué significa un valor de EtCO₂ de 0 mmHg tras intubación?",
-      "a": [
-        "Intubación esofágica",
-        "Hiperventilación",
-        "Apnea",
-        "Fuga en el tubo"
-      ],
-      "c": 0
-    },
-    {
-      "q": "En el manejo del dolor postoperatorio, la analgesia multimodal busca:",
-      "a": [
-        "Reducir el uso de opioides",
-        "Prolongar la sedación",
-        "Evitar el uso de anestésicos locales",
-        "Aumentar la somnolencia"
-      ],
-      "c": 0
-    },
-    {
-      "q": "¿Cuál es la forma más confiable de confirmar la intubación endotraqueal?",
-      "a": [
-        "Condensación en el tubo",
-        "Auscultación bilateral",
-        "Capnografía continua",
-        "Elevación del tórax"
+        "Mayor vibración en instrumentos",
+        "Menor precisión",
+        "Movimientos articulados con 7 grados de libertad",
+        "Requiere menos espacio quirúrgico"
       ],
       "c": 2
     },
     {
-      "q": "El signo más precoz de toxicidad sistémica por anestésicos locales es:",
+      "q": "¿Cuál es un riesgo asociado al neumoperitoneo con CO₂?",
       "a": [
-        "Convulsiones",
-        "Hipotensión",
-        "Parestesias peribucales",
-        "Arritmias"
-      ],
-      "c": 2
-    },
-    {
-      "q": "En pacientes con enfermedad coronaria, el agente más estable hemodinámicamente para inducción es:",
-      "a": [
-        "Etomidato",
-        "Propofol",
-        "Tiopental",
-        "Midazolam"
-      ],
-      "c": 0
-    },
-    {
-      "q": "La posición de Trendelenburg produce:",
-      "a": [
-        "Hipotensión",
-        "Aumento del retorno venoso",
-        "Disminución del gasto cardíaco",
-        "Reducción de la presión intracraneal"
-      ],
-      "c": 1
-    },
-    {
-      "q": "Durante anestesia, el monitoreo del EtCO₂ sirve para:",
-      "a": [
-        "Evaluar la ventilación alveolar",
-        "Medir oxigenación",
-        "Calcular la presión inspiratoria",
-        "Controlar el pulso"
-      ],
-      "c": 0
-    },
-    {
-      "q": "El efecto secundario más frecuente del bloqueo epidural es:",
-      "a": [
-        "Bradicardia",
-        "Hipotensión",
-        "Náuseas",
-        "Dolor lumbar"
-      ],
-      "c": 1
-    },
-    {
-      "q": "En la anestesia obstétrica, el anestésico local más usado en epidural es:",
-      "a": [
-        "Procaína",
-        "Bupivacaína",
-        "Lidocaína",
-        "Ropivacaína"
-      ],
-      "c": 1
-    },
-    {
-      "q": "¿Qué medicamento revierte el bloqueo neuromuscular no despolarizante?",
-      "a": [
-        "Naloxona",
-        "Flumazenilo",
-        "Neostigmina",
-        "Atropina"
-      ],
-      "c": 2
-    },
-    {
-      "q": "En pacientes ancianos, la dosis de anestésicos debe ser:",
-      "a": [
-        "Igual que en jóvenes",
-        "Aumentada",
-        "Reducida",
-        "Dependiente del peso"
-      ],
-      "c": 2
-    },
-    {
-      "q": "En anestesia regional, si el paciente presenta disnea, lo primero es:",
-      "a": [
-        "Administrar oxígeno",
-        "Evaluar la extensión del bloqueo cervical",
-        "Suspender la infusión",
-        "Cambiar la posición"
-      ],
-      "c": 1
-    },
-    {
-      "q": "En cirugía laparoscópica, el CO₂ utilizado para el neumoperitoneo puede causar:",
-      "a": [
-        "Hipoxia",
         "Hipercapnia",
-        "Alcalosis respiratoria",
-        "Bradicardia"
+        "Hipoxia",
+        "Alcalosis metabólica",
+        "Bradicardia refleja"
+      ],
+      "c": 0
+    },
+    {
+      "q": "El sistema Stryker PneumoClear controla simultáneamente:",
+      "a": [
+        "Insuflación, evacuación de humo y filtrado del gas",
+        "Solo presión de gas",
+        "Temperatura del paciente",
+        "Nivel de humedad del gas"
+      ],
+      "c": 0
+    },
+    {
+      "q": "¿Qué tipo de corriente produce mayor dispersión térmica en electrocirugía?",
+      "a": [
+        "Bipolar",
+        "Monopolar",
+        "Ultrasónica",
+        "Mixta"
       ],
       "c": 1
     },
     {
-      "q": "En anestesia total intravenosa (TIVA), la principal ventaja es:",
+      "q": "En cirugía robótica, el cirujano controla el robot desde:",
       "a": [
-        "Inicio más lento",
-        "Menor contaminación ambiental",
-        "Mayor variabilidad hemodinámica",
-        "Mayor riesgo de náusea"
+        "El campo quirúrgico",
+        "Una consola externa",
+        "El panel de anestesia",
+        "Un joystick auxiliar"
       ],
       "c": 1
     },
     {
-      "q": "La atropina se administra antes de la inducción en pediatría para:",
+      "q": "El uso de la energía ultrasónica permite:",
       "a": [
-        "Prevenir bradicardia",
-        "Inducir midriasis",
-        "Reducir secreciones",
-        "Aumentar la sedación"
+        "Coagular por vibración mecánica de alta frecuencia",
+        "Cortar solo por calor",
+        "Sustituir la energía bipolar",
+        "Usar corriente continua"
       ],
       "c": 0
     },
     {
-      "q": "En caso de anafilaxia intraoperatoria, el fármaco de elección es:",
+      "q": "Durante laparoscopía, el riesgo de quemadura accidental por fuga o dispersión de corriente eléctrica es mayor en:",
       "a": [
-        "Adrenalina",
-        "Hidrocortisona",
-        "Difenhidramina",
-        "Dexametasona"
+        "Electrocirugía monopolar",
+        "Energía ultrasónica",
+        "Sellado bipolar",
+        "Láser de baja potencia"
       ],
       "c": 0
     },
     {
-      "q": "En anestesia espinal, el nivel de punción más común es:",
+      "q": "¿Qué parámetro se monitorea constantemente durante la insuflación abdominal?",
       "a": [
-        "L3–L4",
-        "L1–L2",
-        "L5–S1",
-        "T12–L1"
+        "Temperatura corporal",
+        "Frecuencia cardíaca",
+        "Retorno de gas",
+        "Flujo de gas y Presión intraabdominal"
       ],
-      "c": 0
+      "c": 3
     },
     {
-      "q": "En trauma craneal, el agente ideal para la inducción es:",
+      "q": "El uso del sistema BOWA ARC PLUS ofrece:",
       "a": [
-        "Propofol",
-        "Etomidato",
-        "Tiopental",
-        "Ketamina"
+        "No permite sellado",
+        "Tecnología de coagulación con gas Argón",
+        "Limitación al modo corte",
+        "Solo uso monopolar"
       ],
       "c": 1
     },
     {
-      "q": "El óxido nitroso está contraindicado en:",
+      "q": "¿Qué componente del sistema laparoscópico Stryker 1688AIM regula la iluminación?",
       "a": [
-        "Neumotórax",
-        "Apendicectomía",
-        "Cesárea",
-        "Hernioplastía"
+        "Torre de gases",
+        "Fuente de luz LED L11",
+        "Insuflador",
+        "Cámara secundaria"
+      ],
+      "c": 1
+    },
+    {
+      "q": "Durante la cirugía endoscópica, el humo quirúrgico puede contener:",
+      "a": [
+        "Solo vapor de agua",
+        "Partículas biológicas y tóxicas",
+        "Oxígeno puro",
+        "Anestésicos volátiles"
+      ],
+      "c": 1
+    },
+    {
+      "q": "El uso de filtros ULPA en sistemas de evacuación de humo quirúrgico permite:",
+      "a": [
+        "Capturar partículas de hasta 0.1 micras",
+        "Enfriar el gas insuflado",
+        "Filtrar solo gases anestésicos",
+        "Retener humedad"
       ],
       "c": 0
     },
     {
-      "q": "En pacientes obesos, la preoxigenación debe durar al menos:",
+      "q": "¿Qué instrumento se utiliza para introducir el laparoscopio?",
       "a": [
-        "30 segundos",
-        "1 minuto",
-        "3 minutos",
-        "5 minutos"
+        "Pinza de disección",
+        "Óptica de 30°",
+        "Trócars de diferentes calibres",
+        "Cánula de irrigación"
       ],
       "c": 2
     },
     {
-      "q": "Los opioides durante mantenimiento anestésico buscan:",
+      "q": "El principio de la energía monopolar es:",
       "a": [
-        "Atenuar respuesta al estímulo quirúrgico",
-        "Mejorar ventilación",
-        "Reducir temperatura corporal",
-        "Aumentar tono muscular"
-      ],
-      "c": 0
-    },
-    {
-      "q": "Una punción “sangrante” durante anestesia regional sugiere:",
-      "a": [
-        "Punción subaracnoidea",
-        "Lesión vascular",
-        "Mala técnica",
-        "Contaminación"
-      ],
-      "c": 1
-    },
-    {
-      "q": "Antes de la extubación, debe confirmarse:",
-      "a": [
-        "Movimientos respiratorios espontáneos adecuados",
-        "Reflejo tusígeno",
-        "Temperatura corporal normal",
-        "Saturación de 100 %"
-      ],
-      "c": 0
-    },
-    {
-      "q": "En cirugía de urgencia, el ayuno mínimo para líquidos claros es:",
-      "a": [
-        "4 horas",
-        "2 horas",
-        "6 horas",
-        "8 horas"
-      ],
-      "c": 1
-    },
-    {
-      "q": "En pacientes con EPOC, la FiO₂ debe ajustarse para:",
-      "a": [
-        "Evitar depresión del estímulo respiratorio",
-        "Reducir hipercapnia",
-        "Mejorar ventilación",
-        "Prevenir hipoxia"
-      ],
-      "c": 0
-    },
-    {
-      "q": "En cirugías prolongadas, el método más fiable de control térmico es:",
-      "a": [
-        "Nasofaríngeo",
-        "Axilar",
-        "Cutáneo",
-        "Rectal"
-      ],
-      "c": 0
-    },
-    {
-      "q": "La oximetría de pulso mide directamente:",
-      "a": [
-        "Tensión arterial de oxígeno",
-        "Saturación de oxígeno arterial estimada (SpO₂)",
-        "Contenido total de oxígeno",
-        "PaO₂"
-      ],
-      "c": 1
-    },
-    {
-      "q": "En un paciente con mala perfusión periférica, la lectura de SpO₂ puede:",
-      "a": [
-        "Ser más precisa",
-        "Ser falsamente baja",
-        "Ser más alta",
-        "No verse afectada"
-      ],
-      "c": 1
-    },
-    {
-      "q": "¿Cuál es el rango normal de SpO₂ en un paciente sano?",
-      "a": [
-        "90–94 %",
-        "85–90 %",
-        "95–100 %",
-        "100–105 %"
+        "Corriente alterna entre dos pinzas",
+        "Energía mecánica vibratoria",
+        "Flujo de corriente desde el electrodo activo al neutro",
+        "Potencial eléctrico constante"
       ],
       "c": 2
     },
     {
-      "q": "Si el oxímetro muestra baja saturación, pero el paciente está estable y rosado, lo primero es:",
+      "q": "¿Qué ventaja ofrece la energía ultrasónica de BOWA LOTUS?",
       "a": [
-        "Administrar oxígeno",
-        "Cambiar el sensor",
-        "Verificar la colocación del sensor",
-        "Intubar"
+        "Mayor dispersión térmica",
+        "Corte traccional y coagulación con mínima dispersión térmica, sin paso de corriente al paciente",
+        "Uso exclusivo en piel",
+        "Sellado por succión"
+      ],
+      "c": 1
+    },
+    {
+      "q": "Durante una laparoscopía, la posición de Trendelenburg invertido se usa para:",
+      "a": [
+        "Cirugía pélvica",
+        "Mejorar la exposición en cirugías de la parte superior del abdomen",
+        "Mejorar retorno venoso",
+        "Disminuir presión pulmonar"
+      ],
+      "c": 1
+    },
+    {
+      "q": "Una función de seguridad del insuflador PneumoClear es:",
+      "a": [
+        "Administrar anestesia",
+        "Regular temperatura del gas",
+        "Mantener presión y flujo constantes de CO₂",
+        "Controlar la ventilación"
       ],
       "c": 2
     },
     {
-      "q": "En pacientes con anemia severa, la oximetría de pulso puede:",
+      "q": "¿Qué característica destaca al sistema Stryker Connected OR Hub?",
       "a": [
-        "Sobreestimar la oxigenación real",
-        "Subestimar la oxigenación",
-        "No verse afectada",
-        "Duplicar la lectura"
+        "Controlar, visualizar, grabar y compartir información quirúrgica",
+        "Control manual independiente",
+        "Monitoreo anestésico",
+        "Iluminación estandarizada"
       ],
       "c": 0
-    }
+    },
+    {
+      "q": "¿Qué ventaja tiene la energía bipolar frente a la monopolar?",
+      "a": [
+        "Mayor velocidad de corte",
+        "Mayor riesgo de chispas",
+        "Mayor control y seguridad, con menor dispersión térmica y sin paso de corriente por el cuerpo del paciente",
+        "Uso más económico"
+      ],
+      "c": 2
+    },
+    {
+      "q": "El uso de endoscopios rígidos de 30° permite:",
+      "a": [
+        "Imágenes más oscuras",
+        "Visualización panorámica de la cavidad",
+        "Menor profundidad de campo",
+        "Mayor aberración cromática"
+      ],
+      "c": 1
+    },
+    {
+      "q": "¿Cuál es la mejor tecnología en electrocirugía para coagulación profunda del tejido parenquimatoso?",
+      "a": [
+        "Coagulación con energía Bipolar",
+        "Coagulación con energía Monopolar en Modo Spray o de rociado",
+        "Coagulación controlada con energía monopolar y con gas Argón",
+        "Retroalimentación auditiva"
+      ],
+      "c": 2
+    },
+    {
+      "q": "El sistema de imagen Stryker 1688 ofrece tecnología AIM que permite:",
+      "a": [
+        "Mejora automática de brillo",
+        "Visualización de perfusión con verde de indocianina",
+        "Aumento digital por software",
+        "Control remoto de foco"
+      ],
+      "c": 1
+    },
+    {
+      "q": "El sistema de energía BOWA COMFORT permite:",
+      "a": [
+        "Control manual de voltaje",
+        "Uso exclusivo en modo corte",
+        "Reconocimiento automático del instrumento conectado",
+        "Programación secuencial"
+      ],
+      "c": 2
+    },
+    {
+      "q": "¿Qué significa la función de coagulación bipolar simultánea en el ARC400?",
+      "a": [
+        "Exclusivo para laparoscopía",
+        "Genera solo energía bipolar",
+        "Coagulación con dos instrumentos de energía bipolar con activación sincrónica de la energía en ambos instrumentos",
+        "Modo manual fijo"
+      ],
+      "c": 2
+    },
+    {
+      "q": "En cirugía endoscópica, la irrigación continua permite:",
+      "a": [
+        "Disminuir la presión arterial",
+        "Aumentar la absorción de CO₂",
+        "Mantener la visibilidad y retirar residuos",
+        "Controlar el sangrado arterial"
+      ],
+      "c": 2
+    },
+    {
+      "q": "¿Cuál es el tamaño apropiado de monitor en cirugía laparoscópica para evitar fatiga visual del cirujano?",
+      "a": [
+        "32”",
+        "28”",
+        "40”",
+        "50”"
+      ],
+      "c": 0
+    },
+    {
+      "q": "¿Qué parámetro del gas insuflado influye directamente en el dolor postoperatorio?",
+      "a": [
+        "Pureza del gas",
+        "Presión inicial",
+        "Temperatura y humedad del CO₂",
+        "Volumen total usado"
+      ],
+      "c": 2
+    },
+    {
+      "q": "En sistemas de Visualización 1688AIM 4K UHD de Stryker, el beneficio clínico principal es:",
+      "a": [
+        "Menor uso de luz",
+        "Mayor precisión al identificar planos tisulares",
+        "Menor profundidad de campo",
+        "Reducción del tamaño de archivo"
+      ],
+      "c": 1
+    },
+    {
+      "q": "¿Qué medida de seguridad debe verificarse antes de activar energía monopolar?",
+      "a": [
+        "Encendido del generador",
+        "Limpieza del lente óptico",
+        "Posición correcta de la placa neutra",
+        "Potencia en modo bajo"
+      ],
+      "c": 2
+    },
+    {
+      "q": "La tecnología de electrocirugía de BOWA permite el control automático de potencia en función de:",
+      "a": [
+        "Temperatura ambiente",
+        "Tiempo de activación",
+        "Impedancia del tejido",
+        "Tipo de cirugía"
+      ],
+      "c": 2
+    },
+    {
+      "q": "El sistema de insuflación inteligente del PneumoClear ofrece:",
+      "a": [
+        "Control manual",
+        "Flujo intermitente",
+        "Flujo estable con compensación automática de fugas",
+        "Regulación por temporizador"
+      ],
+      "c": 2
+    },
+    {
+      "q": "El correcto balance de blancos se realiza:",
+      "a": [
+        "Dentro de la cavidad del paciente",
+        "Direccionando la óptica hacia un paño blanco con la fuente de luz apagada",
+        "Direccionando la óptica hacia el campo operatorio",
+        "Cubriendo completamente la punta de la óptica con un paño blanco y la fuente de luz encendida"
+      ],
+      "c": 3
+    },
+    {
+      "q": "Durante el sellado de vasos, la correcta activación se confirma por:",
+      "a": [
+        "Cambio de tono acústico del generador",
+        "Coloración azul del tejido",
+        "Aumento del humo",
+        "Luz indicadora roja"
+      ],
+      "c": 0
+    },
+    {
+      "q": "La placa neutra o de retorno en electrocirugía es indispensable cuando se usa:",
+      "a": [
+        "Energía Bipolar",
+        "Energía monopolar",
+        "Energía Ultrasonica",
+        "Ambas energías Monopolar y Bipolar"
+      ],
+      "c": 1
+    },
+
+    { "q": "Aunfalta", "a": ["Aqui van alternativas"], "c": 0 },
+    { "q": "Aunfalta", "a": ["Aqui van alternativas"], "c": 0 },
+    { "q": "Aunfalta", "a": ["Aqui van alternativas"], "c": 0 },
+    { "q": "Aunfalta", "a": ["Aqui van alternativas"], "c": 0 },
+    { "q": "Aunfalta", "a": ["Aqui van alternativas"], "c": 0 },
+    { "q": "Aunfalta", "a": ["Aqui van alternativas"], "c": 0 },
+    { "q": "Aunfalta", "a": ["Aqui van alternativas"], "c": 0 },
+    { "q": "Aunfalta", "a": ["Aqui van alternativas"], "c": 0 }
   ]
 }

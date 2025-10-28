@@ -15,6 +15,14 @@
     <img src="./images/deco.png" alt="" />
   </div>
 
+
+<!-- Overlays centrados (sin panal) -->
+<div class="overlays-center" aria-hidden="true">
+  <img class="overlay lr" src="./images/izquierda.png" alt="" />
+  <img class="overlay rl" src="./images/derecha.png" alt="" />
+</div>
+
+
   <!-- Contenido centrado -->
   <main class="hero">
     <img class="logo" src="./images/logoprincipal.png" alt="Logo" />
@@ -26,7 +34,11 @@
     </nav>
   </main>
 
+  
   <script>
+
+
+
   /* Parallax de la imagen decorativa usando variables CSS (no pisa transform) */
   (function () {
     const img = document.querySelector('.deco-top img');
@@ -100,6 +112,157 @@
   };
   setTimeout(type, startDelay);
 })();
+(() => {
+  // -------- Config --------
+  const ROWS = 8;         // más filas = piezas más pequeñas
+  const COLS = 6;         // vertical 9:16: 5–7 columnas lucen bien
+  const IN_DUR = 2200;    // ms (armado)
+  const HOLD   = 5000;    // ⬅️ quieto armado 8 segundos
+  const OUT_DUR= 2200;    // ms (desarmado)
+  const DELAY_IN  = 18;   // ms por pieza (escalonado armado)
+  const DELAY_OUT = 15;   // ms por pieza (escalonado desarmado)
+
+  const ease = t => t<.5 ? 2*t*t : 1 - Math.pow(-2*t+2,2)/2; // easeInOutQuad
+  const clamp = (v,min,max)=>Math.max(min,Math.min(max,v));
+  const imgs = document.querySelectorAll('.overlays-center img.overlay');
+  if(!imgs.length) return;
+
+  imgs.forEach(setupOverlayCanvas);
+
+  function setupOverlayCanvas(imgEl){
+    const canvas = document.createElement('canvas');
+    canvas.className = (imgEl.className || '') + ' overlay-canvas';
+    imgEl.after(canvas);
+    imgEl.style.visibility = 'hidden';
+
+    const ctx = canvas.getContext('2d', { alpha:true });
+    const ro = new ResizeObserver(resizeCanvas);
+    ro.observe(canvas);
+
+    function resizeCanvas(){
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+      canvas.width = Math.max(1, Math.floor(rect.width * dpr));
+      canvas.height= Math.max(1, Math.floor(rect.height* dpr));
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+
+    const img = new Image();
+    img.decoding='async';
+    img.src = imgEl.src;
+    img.onload = () => start(img);
+    img.onerror = () => console.warn('No se pudo cargar', imgEl.src);
+
+    function start(image){
+      resizeCanvas();
+
+      function fitContain(){
+        const W = canvas.width / ctx.getTransform().a;
+        const H = canvas.height/ ctx.getTransform().d;
+        const ir = image.width / image.height;
+        const cr = W / H;
+        let dw, dh, dx, dy;
+        if (cr > ir){ dh = H; dw = H*ir; dx=(W-dw)/2; dy=0; }
+        else { dw = W; dh = W/ir; dx=0; dy=(H-dh)/2; }
+        return {dx,dy,dw,dh};
+      }
+
+      function buildTiles(){
+        const {dx,dy,dw,dh} = fitContain();
+        const tiles = [];
+        for(let r=0;r<ROWS;r++){
+          for(let c=0;c<COLS;c++){
+            const sx = (c / COLS) * image.width;
+            const sy = (r / ROWS) * image.height;
+            const sw = image.width / COLS;
+            const sh = image.height / ROWS;
+            const tx = dx + (c / COLS) * dw;
+            const ty = dy + (r / ROWS) * dh;
+            const tw = dw / COLS;
+            const th = dh / ROWS;
+            const offX = rand(-70,70);
+            const offY = rand(-90,90);
+            const rot  = rand(-15,15) * Math.PI/180;
+            tiles.push({r,c, sx,sy,sw,sh, tx,ty,tw,th, offX,offY,rot});
+          }
+        }
+        const midR=(ROWS-1)/2, midC=(COLS-1)/2;
+        tiles.sort((a,b)=>{
+          const da=Math.hypot(a.r-midR, a.c-midC);
+          const db=Math.hypot(b.r-midR, b.c-midC);
+          return da-db;
+        });
+        return tiles;
+      }
+
+      let tiles = buildTiles();
+      window.addEventListener('resize', () => { tiles = buildTiles(); });
+
+      function drawTile(t, assembled){ // assembled 0..1
+        const p = clamp(assembled, 0, 1);
+        const alpha = p;
+        const scale = 0.8 + 0.2 * p;
+        const cx = t.tx + t.tw/2;
+        const cy = t.ty + t.th/2;
+        const offX = (1 - p) * t.offX;
+        const offY = (1 - p) * t.offY;
+        const rot  = (1 - p) * t.rot;
+
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.translate(cx + offX, cy + offY);
+        ctx.rotate(rot);
+        ctx.scale(scale, scale);
+        ctx.drawImage(image, t.sx,t.sy,t.sw,t.sh, -t.tw/2,-t.th/2,t.tw,t.th);
+        ctx.restore();
+      }
+
+      // Tiempos totales por fase (incluyendo escalonados)
+      const totalIn  = IN_DUR  + tiles.length*DELAY_IN;
+      const totalOut = OUT_DUR + tiles.length*DELAY_OUT;
+      const PERIOD   = totalIn + HOLD + totalOut; // ⬅️ ciclo = arma + 8s + desarma
+
+      function tick(now){
+        const W = canvas.width / ctx.getTransform().a;
+        const H = canvas.height/ ctx.getTransform().d;
+        ctx.clearRect(0,0,W,H);
+
+        const phase = now % PERIOD;       // 0..PERIOD
+        const inEnd   = totalIn;          // fin de armado
+        const holdEnd = inEnd + HOLD;     // fin de los 8s quieto
+        const outEnd  = PERIOD;           // fin del desarmado
+
+        if (phase <= inEnd){
+          // Armado (centro → afuera)
+          tiles.forEach((t,i)=>{
+            const local = (phase - i*DELAY_IN) / IN_DUR;
+            const p = ease(clamp(local, 0, 1));
+            drawTile(t, p);
+          });
+        } else if (phase <= holdEnd){
+          // Quieto armado 8s
+          tiles.forEach(t => drawTile(t, 1));
+        } else {
+          // Desarmado (afuera → centro)
+          const tOut = phase - holdEnd;
+          const N = tiles.length;
+          tiles.forEach((t, iFromCenter)=>{
+            const i = (N-1) - iFromCenter; // afuera→centro
+            const local = (tOut - i*DELAY_OUT) / OUT_DUR;
+            const p = 1 - ease(clamp(local, 0, 1)); // 1→0
+            drawTile(t, p);
+          });
+        }
+
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+  }
+
+  function rand(min,max){ return Math.random()*(max-min)+min; }
+})();
   </script>
+  
 </body>
 </html>

@@ -86,8 +86,9 @@
 
 <main class="panel" role="main" aria-labelledby="title" aria-describedby="desc">
   <h1 id="title">¡Ganaste!</h1>
-  <p id="desc">Memoria afilada. ¡Excelente trabajo! Volviendo en <span class="count" id="count">5</span>…<br/>Toca cualquier parte para ir ahora.</p>
+  <p id="desc"> <span class="count" id="count" style="opacity: 0;"></span><br/></p>
 </main>
+<audio id="sndVictory" src="./sounds/victory.mp3" preload="auto" playsinline></audio>
 
 <script>
 (function(){
@@ -210,5 +211,50 @@
 
 })();
 </script>
+<script>
+(function setupAutoVictoryOnLoad(){
+  function stopOthers(){
+    try{
+      const w = document.getElementById('sndWin');
+      const l = document.getElementById('sndLose');
+      [w,l].forEach(x=>{ if(x){ x.pause(); x.currentTime=0; } });
+    }catch(_){}
+  }
+
+  function tryPlayVictory(){
+    try{
+      stopOthers();
+      const a = document.getElementById('sndVictory');
+      if(!a) return Promise.resolve();
+      a.currentTime = 0;
+      a.volume = 0.9;
+      return a.play();
+    }catch(_){
+      return Promise.reject();
+    }
+  }
+
+  // 1) Intento inmediato al cargar
+  document.addEventListener('DOMContentLoaded', () => {
+    tryPlayVictory().catch(()=> {
+      // 2) Si falla por autoplay, desbloquear en la primera interacción
+      const unlock = () => {
+        tryPlayVictory().finally(() => {
+          window.removeEventListener('pointerdown', unlock, {capture:true});
+          window.removeEventListener('keydown', unlock, {capture:true});
+          document.removeEventListener('visibilitychange', unlock, {capture:true});
+        });
+      };
+      window.addEventListener('pointerdown', unlock, {once:true, capture:true});
+      window.addEventListener('keydown', unlock, {once:true, capture:true});
+      // En iOS al volver de background puede permitirlo
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) unlock();
+      }, {once:true, capture:true});
+    });
+  });
+})();
+</script>
+
 </body>
 </html>

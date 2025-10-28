@@ -34,6 +34,8 @@
       <!-- Sonidos -->
       <audio id="sndWin" src="./sounds/win.mp3" preload="auto"></audio>
       <audio id="sndLose" src="./sounds/lose.mp3" preload="auto"></audio>
+      <audio id="sndVictory" src="./sounds/victory.mp3" preload="auto"></audio> <!-- ⬅️ NUEVO -->
+
     </main>
 
     <div class="btnback" onclick="window.location.href='trivia.html'">
@@ -304,7 +306,7 @@ function showEndScreenInline(isWin){
 
   // Título con animación de entrada
 const h = document.createElement('h2');
-h.textContent = isWin ? 'Ganaste' : 'Vuelve a Intentarlo';
+h.textContent = isWin ? '¡Ganaste!' : '¡Siga intentando!';
 h.style.margin = '0 0 16px 0';
 h.style.fontSize = '120px';
 h.style.lineHeight = '1';
@@ -338,9 +340,23 @@ setTimeout(() => {
 
   // Confeti ligero si gana (auto-inyecta keyframes si faltan)
   if (isWin) {
-    ensureConfettiKeyframes();
-    spawnConfettiInline(160); // cantidad de piezas
-  }
+  ensureConfettiKeyframes();
+  spawnConfettiInline(160);
+
+  // ⬇️ Sonido de victoria (evita solapes con otros audios)
+  try {
+    const a = document.getElementById('sndVictory');
+    const w = document.getElementById('sndWin');
+    const l = document.getElementById('sndLose');
+    [w, l].forEach(x => { if (x) { x.pause(); x.currentTime = 0; }});
+    if (a) { a.currentTime = 0; a.volume = 0.9; a.play().catch(()=>{}); }
+  } catch {}
+}
+
+
+
+
+
 }
 
 // Inyecta @keyframes si no existe (para no depender de tu CSS)
